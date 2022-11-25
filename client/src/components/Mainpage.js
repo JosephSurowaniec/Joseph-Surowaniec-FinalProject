@@ -3,11 +3,12 @@ import { UserContext } from "./UserContext";
 
 
 const MainPage = () => {
-    const { profileName , loggedIn} = useContext(UserContext)
+    const { profileName , loggedIn, userId} = useContext(UserContext)
 
     const handleLogIn = () => {
         console.log(profileName);
         console.log(loggedIn);
+        console.log(userId);
     }
     return(
             <div>

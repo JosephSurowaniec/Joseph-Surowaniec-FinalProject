@@ -5,7 +5,7 @@ import { UserContext } from "./UserContext";
 
 const LogInPage = () => {
     
-    const { profileName , loggedIn , setProfileName, setLoggedIn } = useContext(UserContext);
+    const { profileName , loggedIn , userId, setProfileName, setLoggedIn, setUserId } = useContext(UserContext);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");    
     const navigate = useNavigate();
@@ -33,6 +33,7 @@ const LogInPage = () => {
                         console.log(data);
                         setProfileName(data.data[0].username);
                         setLoggedIn(true);
+                        setUserId(data.data[0]._id);
                     })
                     .catch((error) => {
                         console.log(error);

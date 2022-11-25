@@ -8,16 +8,21 @@ import { UserContext } from "./UserContext";
 
 const Header = () => {
 
-  const { profileName , loggedIn , setProfileName , setLoggedIn } = useContext(UserContext);
+  const { profileName , loggedIn , userId, setProfileName , setLoggedIn } = useContext(UserContext);
 
   const navigate = useNavigate();
 
   const handleLogOff = () => {
     setProfileName("");
     setLoggedIn(false);
-  }
-  const handlePlayerNavigate = () => {
+  };
 
+  const handleProfileNavigate = () => {
+    console.log("Navigate to the profile tab");
+    navigate(`/profile/${userId}`);
+  };
+
+  const handlePlayerNavigate = () => {
     console.log("Navigate to the player tab");
     navigate("/character");
   };
@@ -29,32 +34,52 @@ const Header = () => {
   };
 
   return (
-    <>
-      <Wrapper>
+    <Wrapper>
+      <UpperWrapper>
         <HomepageButton onClick={handleMainpageNavigate}> Go to the MainPage</HomepageButton>
         <h1>This is the Header object</h1>
-        <PlayerButton onClick={handlePlayerNavigate}> Go to the Players Page</PlayerButton>
+        
         {loggedIn?
         <div>
           You are logged in as {profileName}
           <button onClick={handleLogOff}>Log Off</button>
         </div>:
         <LogInPage />}
-        {/* <h1>Auth buttons</h1>
-        <LoginButton />
-        <LogoutButton /> */}
-      </Wrapper>
-
-    </>
+        
+      </UpperWrapper>
+      {loggedIn?
+        <LowerWrapper>
+          <PlayerButton onClick={handlePlayerNavigate}> Go to the Players Page</PlayerButton>
+          <PlayerButton onClick={handleProfileNavigate}> Go to the Profile Page</PlayerButton>
+        </LowerWrapper>
+      :<></>}
+    </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  border: 1px solid black;
+  flex-direction: column;
+  border: 1px solid red;
+  width: 100vw;
+
+`
+const UpperWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  border: 1px solid blue;
   width: 100vw;
   background-color: black;
+  color: white;
+`;
+
+const LowerWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  border: none;
+  width: 100vw;
+  background-color: grey;
   color: white;
 `;
 
