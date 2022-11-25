@@ -2,6 +2,7 @@ const express = require('express');
 const helmet = require("helmet");
 const morgan = require('morgan');
 
+const { addNewUser, logInAttempt } = require('./Handlers/UserHandlers')
 const { addNewCharacter } = require('./Handlers/CharacterHandlers');
 const port = 8000;
 
@@ -16,6 +17,8 @@ express()
     .use('/', express.static(__dirname + '/'))
 
     .post("/newcharacters", addNewCharacter)
+    .post("/newUser", addNewUser)
+    .post("/user",  logInAttempt)
 
     .get("*", (req, res) => {
         res.status(404).json({
