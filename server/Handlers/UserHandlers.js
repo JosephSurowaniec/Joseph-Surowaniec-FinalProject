@@ -16,21 +16,25 @@ const addNewUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options)
   
   const newUserDetails = req.body;
-
+  const newUser = {  _id: uuidv4(),
+                      username: newUserDetails.username,
+                      password: newUserDetails.password,
+                      email: newUserDetails.email}
   try {
     // Connect client
     await client.connect()
     console.log("Connected")
     const db = client.db("Final_Project_DnD")
 
-    // insert formatted order to db Orders collection
-    await db.collection("Users").insertOne( newUserDetails )
+    const checkAvailableUsername = await db.collection("Users").find({username: `${newUserDetails.username}`}).toArray();
 
-    res.status(200).json({
-      status: 200,
-      message: "User-Created",
-      data: newUserDetails
-    })
+    // insert formatted order to db Orders collection
+    if (checkAvailableUsername[0]) {
+      res.status(400).json({status: 400, message: "Username already Taken", data: checkAvailableUsername})
+    } else {
+      await db.collection("Users").insertOne( newUser )
+      res.status(200).json({status: 200, message: "User-Created", data: newUser})
+    }
   } catch(err) {
     res.status(400).json({
       status: 400, 

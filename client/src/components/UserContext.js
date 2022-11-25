@@ -6,9 +6,9 @@ export const UserContext = createContext(null);
 
 export const UserProvidor = ({ children }) => {
 
-    const [profileName , setProfileName] = useState("")
-    const [loggedIn , setLoggedIn] = useState(false)
-
+    const [profileName , setProfileName] = useState("");
+    const [loggedIn , setLoggedIn] = useState(false);
+    const [userId , setUserId] = useState("");
 
     return (
         <UserContext.Provider 
@@ -16,7 +16,9 @@ export const UserProvidor = ({ children }) => {
                 profileName,
                 setProfileName,
                 loggedIn,
-                setLoggedIn
+                setLoggedIn,
+                userId,
+                setUserId
             }}
             >
                 {children}
