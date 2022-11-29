@@ -5,10 +5,12 @@ import LoginButton from "./LoginButton";
 import LogInPage from "./LogInPage";
 import LogoutButton from "./LogoutButton";
 import { UserContext } from "./UserContext";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Header = () => {
 
   const { profileName , loggedIn , userId, setProfileName , setLoggedIn } = useContext(UserContext);
+  const { user, isAuthenticated } = useAuth0();
 
   const navigate = useNavigate();
 
@@ -38,16 +40,18 @@ const Header = () => {
       <UpperWrapper>
         <HomepageButton onClick={handleMainpageNavigate}> Go to the MainPage</HomepageButton>
         <h1>This is the Header object</h1>
+        <LoginButton />
+        <LogoutButton />
         
-        {loggedIn?
+        {/* {loggedIn?
         <div>
           You are logged in as {profileName}
           <button onClick={handleLogOff}>Log Off</button>
         </div>:
-        <LogInPage />}
+        <LogInPage />} */}
         
       </UpperWrapper>
-      {loggedIn?
+      {isAuthenticated?
         <LowerWrapper>
           <PlayerButton onClick={handlePlayerNavigate}> Go to the Players Page</PlayerButton>
           <PlayerButton onClick={handleProfileNavigate}> Go to the Profile Page</PlayerButton>

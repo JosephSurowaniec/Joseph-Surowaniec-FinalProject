@@ -8,14 +8,17 @@ import ClassOptions from "./ClassOptions";
 import GeneralCharacterDetails from "./GeneralCharacterDetails";
 import RaceOptions from "./RaceOptions";
 import { UserContext } from "./UserContext";
+import { useAuth0 } from "@auth0/auth0-react";
+import CharacterLevels from "./CharacterLevels";
 
 
 const Character = () => {
 
     const { characterClasses, characterRaces, state  } = useContext ( CharacterContext );
     const {actions} = useContext(CharacterContext);
-    const { userId, loggedIn } = useContext(UserContext);
+    const { userId } = useContext(UserContext);
     const [ currentlyDisplayed, setCurrentlyDisplayed] = useState("general")
+    const { isAuthenticated } = useAuth0();
 
     const handleShowSection = (section) => {
         setCurrentlyDisplayed(section);
@@ -43,7 +46,7 @@ const Character = () => {
     };
 
     return (
-        loggedIn
+        isAuthenticated
         ?
         <Wrapper>
             <h1>THis is the character creation page</h1>
@@ -59,6 +62,7 @@ const Character = () => {
                 <button onClick={() => handleShowSection("race")}>Race</button>
                 <button onClick={() => handleShowSection("class")}>Class</button>
                 <button onClick={() => handleShowSection("scores")}>Ability Scores</button>
+                <button onClick={() => handleShowSection("levels")}>Levels</button>
             </div>
             {currentlyDisplayed === "general"?<GeneralCharacterDetails />:<></>}
             {!characterClasses
@@ -76,6 +80,12 @@ const Character = () => {
                     {!characterClasses?<h1>Loading</h1>
                         :<div>
                             {currentlyDisplayed === "scores"?<CharacterAbilityPoints />:<></>}
+                        </div>}
+                </div>
+                <div>
+                    {!characterClasses?<h1>Loading</h1>
+                        :<div>
+                            {currentlyDisplayed === "levels"?<CharacterLevels classDetails={state.selectedClass} levelDetails={state.classData} />:<></>}
                         </div>}
                 </div>
             

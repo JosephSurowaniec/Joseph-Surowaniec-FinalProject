@@ -8,7 +8,6 @@ const CharacterClassOptions = () => {
 
     const { characterClasses, characterRaces, state  } = useContext ( CharacterContext );
     const {actions} = useContext(CharacterContext);
-    const { userId, loggedIn } = useContext(UserContext);
 
     return (
         <div>
