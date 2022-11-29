@@ -11,6 +11,38 @@ const options = {
     useUnifiedTopology: true,
   }
 
+  const getUser = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options)
+    
+    const userEmail = req.params.userEmail;
+    
+    
+    try {
+      // Connect client
+      await client.connect()
+      console.log("Connected")
+      const db = client.db("Final_Project_DnD")
+  
+      // insert formatted order to db Orders collection
+      const userData = await db.collection("Users").find({email: `${userEmail}`}).toArray();
+
+      res.status(200).json({
+        status: 200,
+        message: "Data found",
+        data: userData
+      })
+    } catch(err) {
+      res.status(400).json({
+        status: 400, 
+        message: "An Error Occured c'mon we got this",
+        data: userData
+      })
+    } finally {
+      // disconnect from database 
+      client.close()
+      console.log("Disconnected")
+    }
+  };
 // add new order into database
 const addNewUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options)
@@ -82,9 +114,80 @@ const logInAttempt = async (req, res) => {
       }
   };
 
+  const getHomeFeed = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options)
+    
+    try {
+      // Connect client
+      await client.connect()
+      console.log("Connected")
+      const db = client.db("Final_Project_DnD")
+  
+      // insert formatted order to db Orders collection
+      const mainFeed = await db.collection("Home_Feed").find({feedPage: "Homepage"}).toArray();
+
+      res.status(200).json({
+        status: 200,
+        message: "Data found",
+        data: mainFeed
+      })
+    } catch(err) {
+      res.status(400).json({
+        status: 400, 
+        message: "An Error Occured c'mon we got this",
+        data: mainFeed
+      })
+    } finally {
+      // disconnect from database 
+      client.close()
+      console.log("Disconnected")
+    }
+  };
+
+  const addNewPostHomeFeed = async (req, res) => { // POST FEED
+    const client = new MongoClient(MONGO_URI, options)
+    
+    const userPost = req.body;
+
+    try {
+        // Connect client
+        await client.connect()
+      console.log("Connected")
+      const db = client.db("Final_Project_DnD");
+
+      const newPost = { _id: uuidv4(),
+                        userId: userPost.userId,
+                        message: userPost.status,
+                        feedPage: "Homepage"}
+
+        console.log("it hit here");
+      // insert formatted order to db Orders collection
+        const userAddAttempt = await db.collection("Home_Feed").insertOne(newPost)
+        
+        userAddAttempt
+        
+            ?res.status(200).json({status: 200, message: "Message Added", data: userAddAttempt})
+            :res.status(400).json({status: 400, message: "Bad Attempt"})
+        
+      } catch(err) {
+        res.status(400).json({
+          status: 400, 
+          message: "An Error Occured c'mon we got this",
+          data: err
+        })
+      } finally {
+        // disconnect from database 
+        client.close()
+        console.log("Disconnected")
+      }
+  };
 
 
 module.exports = {
     addNewUser,
-    logInAttempt
+    logInAttempt,
+    getUser,
+    getHomeFeed,
+    addNewPostHomeFeed
 }
+

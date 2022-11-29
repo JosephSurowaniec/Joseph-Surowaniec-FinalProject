@@ -7,7 +7,6 @@ const CharacterAbilityPoints = () => {
 
     const { characterClasses, characterRaces, state  } = useContext ( CharacterContext );
     const {actions} = useContext(CharacterContext);
-    const { userId, loggedIn } = useContext(UserContext);
     const [ strPoints, setStrPoints] = useState(0);
     const [ dexPoints, setDexPoints] = useState(0);
     const [ conPoints, setConPoints] = useState(0);

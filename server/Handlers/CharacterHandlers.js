@@ -48,8 +48,148 @@ const addNewCharacter = async (req, res) => {
   }
 };
 
+// add new order into database
+const getCharactersByUsers = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options)
+  
+  const getUserInfo = req.params.userId;
+  console.log(getUserInfo);
+
+  try {
+    // Connect client
+    await client.connect()
+    console.log("Connected")
+    const db = client.db("Final_Project_DnD")
+
+    // insert formatted order to db Orders collection
+    const userData = await db.collection("User-Characters").find({userId: `${getUserInfo}`}).toArray();
+
+    res.status(200).json({
+      status: 200,
+      message: "Data found",
+      data: userData
+    })
+  } catch(err) {
+    res.status(400).json({
+      status: 400, 
+      message: "An Error Occured c'mon we got this",
+      data: userData
+    })
+  } finally {
+    // disconnect from database 
+    client.close()
+    console.log("Disconnected")
+  }
+};
+
+const getCharacter = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options)
+  
+  const getCharacterId = req.params.characterId;
+  
+
+  try {
+    // Connect client
+    await client.connect()
+    console.log("Connected")
+    const db = client.db("Final_Project_DnD")
+
+    // insert formatted order to db Orders collection
+    const characterData = await db.collection("User-Characters").find({_id: `${getCharacterId}`}).toArray();
+
+    res.status(200).json({
+      status: 200,
+      message: "Data found",
+      data: characterData
+    })
+  } catch(err) {
+    res.status(400).json({
+      status: 400, 
+      message: "An Error Occured c'mon we got this",
+      data: characterData
+    })
+  } finally {
+    // disconnect from database 
+    client.close()
+    console.log("Disconnected")
+  }
+};
+
+const getCharacterFeed = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options)
+  
+  const getCharacterId = req.params.characterId;
+  
+
+  try {
+    // Connect client
+    await client.connect()
+    console.log("Connected")
+    const db = client.db("Final_Project_DnD")
+
+    // insert formatted order to db Orders collection
+    const characterFeedData = await db.collection("Home_Feed").find({characterId: `${getCharacterId}`}).toArray();
+
+    res.status(200).json({
+      status: 200,
+      message: "Data found",
+      data: characterFeedData
+    })
+  } catch(err) {
+    res.status(400).json({
+      status: 400, 
+      message: "An Error Occured c'mon we got this",
+      data: characterFeedData
+    })
+  } finally {
+    // disconnect from database 
+    client.close()
+    console.log("Disconnected")
+  }
+};
+
+const addNewCharacterPost = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options)
+  
+  const newCharacterMessage = req.body.status;
+  const characterId = req.body.characterId;
+
+  const newCharacterPost = { _id: uuidv4(),
+                        characterId: characterId,
+                        message: newCharacterMessage,
+                        feedPage: "Character"}
+  try {
+    // Connect client
+    await client.connect()
+    console.log("Connected")
+    const db = client.db("Final_Project_DnD")
+
+    // insert formatted order to db Orders collection
+    await db.collection("Home_Feed").insertOne( newCharacterPost )
+
+    res.status(200).json({
+      status: 200,
+      message: "Character-Added",
+      data: newCharacterPost
+    })
+  } catch(err) {
+    res.status(400).json({
+      status: 400, 
+      message: "An Error Occured c'mon we got this",
+      data: newCharacterPost
+    })
+  } finally {
+    // disconnect from database 
+    client.close()
+    console.log("Disconnected")
+  }
+};
 
 
 module.exports = {
-  addNewCharacter
+  addNewCharacter,
+  getCharactersByUsers,
+  getCharacter,
+  getCharacterFeed,
+  addNewCharacterPost
 }

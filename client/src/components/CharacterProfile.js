@@ -1,31 +1,46 @@
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from "./UserContext";
-import { useAuth0 } from "@auth0/auth0-react";
+import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import FeedMessage from "./FeedMessage";
+import { UserContext } from "./UserContext";
 
-const MainPage = () => {
-    const { profileName , loggedIn, userId} = useContext(UserContext)
-    const { user, isAuthenticated } = useAuth0();
+const CharacterProfile = () => {
+
+    const { profileName , loggedIn, userId} = useContext(UserContext);
+    const {characterId} = useParams();
+    const [specificCharacterInfo, setSpecificCharacterInfo] = useState("");
     const [formData, setFormData] = useState("");
-    const [ homeFeed, setHomeFeed ] = useState("");
-
+    const [characterFeed, setCharacterFeed ] = useState("")
 
     useEffect(() => {
-        fetch(`/homefeed`)
+        console.log("check-in here")
+        console.log(characterId)
+        console.log(" second check-in here")
+        if (characterId) {
+            fetch(`/character/${characterId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                setSpecificCharacterInfo(data.data[0].characterInformation)
+            })
+            .catch((error) => {
+                window.alert(error);
+            });
+        }
+        
+    }, [characterId]);
+
+    useEffect(() => {
+        fetch(`/characterFeed/${characterId}`)
         .then(res => res.json())
         .then(data => {
-            setHomeFeed(data.data);
+            setCharacterFeed(data.data);
 
         }).catch((error) => {
-          console.log("The MainFeed Broke")
+          console.log("The Character Feed Broke")
       })
     }, []);
 
-    const handleLogIn = () => {
-        console.log(JSON.stringify(user));
-        console.log(userId);
-    };
 
     const handleChange = (value) => {
         setFormData(value)
@@ -40,22 +55,22 @@ const MainPage = () => {
         resetTextArea();
         console.log("working");
 
-        fetch("/homefeed/addPost", {
+        fetch("/characterFeed/addCharacterPost", {
           method: "POST",
           headers: {
               "Accept": "application/json",
               "Content-Type": "application/json"
           },
-          body: JSON.stringify({status : formData, userId : userId})
+          body: JSON.stringify({status : formData, characterId : characterId})
       })
           .then(res => {
               return res.json()
           })
           .then((data) => {
-                fetch("/homefeed")
+                fetch(`/characterFeed/${characterId}`)
                 .then(res => res.json())
                 .then(data => {
-                    setHomeFeed(data.data);
+                    setCharacterFeed(data.data);
                     
                 });
               })
@@ -66,19 +81,30 @@ const MainPage = () => {
       };
 
       const testHomefeed = () => {
-        console.log(homeFeed);
+        console.log(characterFeed);
   
         
       }
 
-    return(
+    return (
+        <div>
+            <h1>This is the character Details page</h1>
+            {!specificCharacterInfo?<>Loading</>
+            :
             <div>
-                This is the Homepage
-                <button onClick={handleLogIn}>CHeck vitals</button>
-                {!isAuthenticated ?<></>:<>{profileName} is logged In. Have Fun!</>}
-                {isAuthenticated ?<div>
-                    Now logged in with Auth0
-                    <Textbox>
+                {console.log(specificCharacterInfo)}
+                <div>
+                    {specificCharacterInfo.characterName}
+                </div>
+                <div>
+                    {specificCharacterInfo.selectedClass.name}
+                </div>
+                <div>
+                    {specificCharacterInfo.selectedRace.name}
+                </div>
+                
+                <div>
+                <Textbox>
                         <MiniHeader>Home</MiniHeader>
                     
                         <form onSubmit={handleSubmit}>
@@ -98,13 +124,13 @@ const MainPage = () => {
 
                     <div>
                         <button onClick={testHomefeed}></button>
-                        {!homeFeed[0]
+                        {!characterFeed[0]
                         ?<div>Loading</div>
                         :
                         <>  
                         <h1>Testing Area</h1>
                         
-                        <StyledDiv>{homeFeed.map((feedDetails) => {
+                        <StyledDiv>{characterFeed.map((feedDetails) => {
                         return (
                             
                             <FeedArea key={Math.floor(Math.random()*140000000000000)}>
@@ -119,13 +145,10 @@ const MainPage = () => {
                     }
                     </div>
                 </div>
-                :<>Loading</>}
-            </div>
-        )
-        
-    
+            </div>}
+        </div>
+    );
 };
-
 
 const Textbox = styled.div`
 display: flex;
@@ -221,7 +244,4 @@ const StyledDiv = styled.div`
   display: flex;
   flex-direction: column-reverse;
   `;
-
-export default MainPage;
-
-
+export default CharacterProfile;
