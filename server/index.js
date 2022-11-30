@@ -3,17 +3,17 @@ const helmet = require("helmet");
 const morgan = require('morgan');
 
 const { addNewUser, logInAttempt , getUser , getHomeFeed , addNewPostHomeFeed } = require('./Handlers/UserHandlers')
-const { addNewCharacter, getCharactersByUsers , getCharacter , addNewCharacterPost , getCharacterFeed } = require('./Handlers/CharacterHandlers');
+const { addNewCharacter, getCharactersByUsers , getCharacter , addNewCharacterPost , getCharacterFeed , uploadImageToCloud } = require('./Handlers/CharacterHandlers');
 const port = 8000;
 
 
 
 express()
 
-    .use(express.json())
+    .use(express.json( {limit: '50mb'}))
     .use(helmet())
     .use(morgan('tiny'))
-    .use(express.urlencoded({ extended: false }))
+    .use(express.urlencoded({ limit: '50mb' , extended: true }))
     .use('/', express.static(__dirname + '/'))
 
     .post("/newcharacters", addNewCharacter)
@@ -29,6 +29,7 @@ express()
     .get("/characterFeed/:characterId", getCharacterFeed )
     .post("/characterFeed/addCharacterPost", addNewCharacterPost )
 
+    .post("/testingUpload", uploadImageToCloud)
     .get("*", (req, res) => {
         res.status(404).json({
         status: 404,

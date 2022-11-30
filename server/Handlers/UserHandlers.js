@@ -155,9 +155,12 @@ const logInAttempt = async (req, res) => {
       console.log("Connected")
       const db = client.db("Final_Project_DnD");
 
+      const postedCharInfo = await db.collection("User-Characters").find({_id: userPost.characterId }).toArray();
+
       const newPost = { _id: uuidv4(),
                         userId: userPost.userId,
                         message: userPost.status,
+                        character: postedCharInfo,
                         feedPage: "Homepage"}
 
         console.log("it hit here");

@@ -3,15 +3,18 @@ import { UserContext } from "./UserContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
 import FeedMessage from "./FeedMessage";
+import CharacterFeed from "./CharacterFeed";
 
 const MainPage = () => {
     const { profileName , loggedIn, userId} = useContext(UserContext)
     const { user, isAuthenticated } = useAuth0();
     const [formData, setFormData] = useState("");
     const [ homeFeed, setHomeFeed ] = useState("");
-
+    const [userCharacters , setUserCharacters] = useState("");
+    const [postCharacter , setPostCharacter] = useState("");
 
     useEffect(() => {
+
         fetch(`/homefeed`)
         .then(res => res.json())
         .then(data => {
@@ -19,7 +22,18 @@ const MainPage = () => {
 
         }).catch((error) => {
           console.log("The MainFeed Broke")
-      })
+      });
+
+      fetch(`/profile/${userId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                setUserCharacters(data.data);
+            })
+            .catch((error) => {
+                window.alert("An Error Occured");
+            });
+
     }, []);
 
     const handleLogIn = () => {
@@ -46,7 +60,7 @@ const MainPage = () => {
               "Accept": "application/json",
               "Content-Type": "application/json"
           },
-          body: JSON.stringify({status : formData, userId : userId})
+          body: JSON.stringify({status : formData, userId : userId, characterId : postCharacter})
       })
           .then(res => {
               return res.json()
@@ -67,12 +81,20 @@ const MainPage = () => {
 
       const testHomefeed = () => {
         console.log(homeFeed);
-  
-        
+      };
+
+      const handlePostedCharacter = (data) => { 
+        console.log(data);
+        setPostCharacter(data);
+      };
+
+      const checkVitals = () => {
+        console.log(postCharacter);
+        console.log(userCharacters);
       }
 
     return(
-            <div>
+            <Wrapper>
                 This is the Homepage
                 <button onClick={handleLogIn}>CHeck vitals</button>
                 {!isAuthenticated ?<></>:<>{profileName} is logged In. Have Fun!</>}
@@ -80,16 +102,46 @@ const MainPage = () => {
                     Now logged in with Auth0
                     <Textbox>
                         <MiniHeader>Home</MiniHeader>
-                    
+                        <button onClick={checkVitals}>
+                              Testing User Character
+                          </button>
+                        {userCharacters?<form>
+                          <select value={postCharacter} onChange={(e) => {handlePostedCharacter(e.target.value)} }>
+                            {userCharacters.map((element) => {
+                              return (
+                                <option key={Math.floor(Math.random()*140000000000000)} value={element._id}>
+                                  {element.characterInformation.characterName}
+                                </option>
+                              )
+                            })}
+                          </select>
+                        </form>
+                        :<></>}
                         <form onSubmit={handleSubmit}>
-                        <StyledTextInput><StyledTextArea name="message" id="message" value={formData} placeholder="What's On Your Mind?" onChange={(e) => handleChange(e.target.value)} /></StyledTextInput>
+                        <StyledTextInput>
+                          <StyledTextArea name="message" id="message" value={formData} placeholder="Share Your Characters!" onChange={(e) => handleChange(e.target.value)} />
+                          <div>
+                            THis is where to display to selected Character
+                            {userCharacters?userCharacters.filter((el) => {
+                          return(
+                            el._id === postCharacter
+                            )}).map((element) => {
+                              return(
+                                <div key={Math.floor(Math.random()*140000000000000)}>
+                                  <CharacterFeed characterDetails={element.characterInformation} characterId={element._id}/>
+                                </div>
+                                
+                              )
+                            }):<div>No Character Chosen</div>}
+                          </div>
+                        </StyledTextInput>
                         <InputArea>
                             {
                             formData.length > 224
-                                ?<>{formData.length > 280 ?<OverLimit>{280 - formData.length}</OverLimit> : <LessWords>{280 - formData.length}</LessWords>} </>
-                                :<CharacterCount>{280 - formData.length}</CharacterCount>
+                                ?<>{formData.length > 150 ?<OverLimit>{150 - formData.length}</OverLimit> : <LessWords>{150 - formData.length}</LessWords>} </>
+                                :<CharacterCount>{150 - formData.length}</CharacterCount>
                             }
-                            <StyledSubmit type="submit" disabled={formData.length > 280}>Submit</StyledSubmit>
+                            <StyledSubmit type="submit" disabled={formData.length > 150}>Submit</StyledSubmit>
                         </InputArea>
                         </form>
                         
@@ -102,13 +154,13 @@ const MainPage = () => {
                         ?<div>Loading</div>
                         :
                         <>  
-                        <h1>Testing Area</h1>
+                        <h1>General Chat</h1>
                         
                         <StyledDiv>{homeFeed.map((feedDetails) => {
                         return (
                             
                             <FeedArea key={Math.floor(Math.random()*140000000000000)}>
-                                <FeedMessage message={feedDetails.message} />
+                                <FeedMessage message={feedDetails.message} character={feedDetails.character} />
                             </FeedArea>
                             
                         )
@@ -118,22 +170,32 @@ const MainPage = () => {
                     </>
                     }
                     </div>
+                    <div>
+                      <h1>This is the Miniature Gallery Section</h1>
+                        <div>
+                          
+                        </div>
+                    </div>
                 </div>
+                
                 :<>Loading</>}
-            </div>
+            </Wrapper>
         )
         
     
 };
 
-
+const Wrapper = styled.div`
+padding: 35px;
+`;
 const Textbox = styled.div`
 display: flex;
 flex-direction: column;
 border-bottom: 10px solid rgba(0, 0, 0, 0.15);
 `;
 const StyledTextInput=styled.div`
-
+display: flex;
+border: 1px solid green;
 `
 const MiniHeader = styled.div`
 border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -176,6 +238,7 @@ const StyledTextArea = styled.textarea`
   border-radius: 4px;
   resize: none;
   font-size: 18px;
+  border: 1px solid black;
   :focus {
     outline: none;
   }
@@ -194,7 +257,6 @@ const StyledTextArea = styled.textarea`
 
 const InputArea = styled.div`
 display: flex;
-justify-content: flex-end;
 padding: 0px 50px 0px 15px;
 align-items: center;
 `

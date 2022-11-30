@@ -8,6 +8,7 @@ const initialState = {
     selectedClass: "",
     selectedRace: "",
     classData:"",
+    characterImageId: "",
     abilityScores:{
         strength: 8,
         dexterity: 8,
@@ -46,6 +47,12 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 classData: action.data
+            }
+        }
+        case "addCharacterImage": {
+            return {
+                ...state,
+                characterImageId: action.data
             }
         }
         case "addStrength": {
@@ -152,6 +159,13 @@ export const CharacterProvidor = ({ children }) => {
         })
     };
 
+    const updateCharacterImage = (data) => {
+        dispatch({
+            type: "addCharacterImage",
+            data
+        })
+    };
+
     const updateStr = (data) => {
         dispatch({
             type: "addStrength",
@@ -195,7 +209,7 @@ export const CharacterProvidor = ({ children }) => {
                 characterClasses,
                 characterRaces,
                 state,
-                actions: {updateCharacterName, updateRace, updateClass, updateClassDetails, updateStr, updateDex, updateCon, updateInt, updateWis, updateCha }
+                actions: {updateCharacterName, updateRace, updateClass, updateClassDetails, updateCharacterImage, updateStr, updateDex, updateCon, updateInt, updateWis, updateCha }
             }}
             >
                 {children}

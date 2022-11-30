@@ -11,6 +11,8 @@ const options = {
     useUnifiedTopology: true,
   }
 
+const { cloudinary } = require("../cloudinary");
+
 // add new order into database
 const addNewCharacter = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options)
@@ -185,11 +187,26 @@ const addNewCharacterPost = async (req, res) => {
   }
 };
 
+const uploadImageToCloud = async (req, res) => {
+  const imageFile = req.body.data;
+
+  try {
+    const uploadedImage = await cloudinary.uploader.upload(imageFile , {
+      upload_preset: 'Testing_Setup'
+    })
+    res.status(200).json({status: 200,message: "Image-Submitted", data: uploadedImage})
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({status: 400,message: "Submission Failed"})
+  }
+};
+
 
 module.exports = {
   addNewCharacter,
   getCharactersByUsers,
   getCharacter,
   getCharacterFeed,
-  addNewCharacterPost
+  addNewCharacterPost,
+  uploadImageToCloud
 }
