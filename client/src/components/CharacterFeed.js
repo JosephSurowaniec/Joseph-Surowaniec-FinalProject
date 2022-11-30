@@ -4,7 +4,6 @@ import styled from "styled-components";
 const CharacterFeed = (characterInfo) => {
 
     const navigate = useNavigate();
-    console.log(characterInfo);
     const specificInfo = characterInfo.characterDetails;
 
     const handleNav = () => {
@@ -26,7 +25,10 @@ const Wrapper = styled.div`
 border: 1px solid black;
 margin: 5px;
 padding: 5px;
-`
+:hover {
+    cursor: pointer;
+}
+`;
 
 const CharacterName = styled.div`
 font-size: 35px;

@@ -53,7 +53,7 @@ const Header = () => {
       </UpperWrapper>
       {isAuthenticated?
         <LowerWrapper>
-          <PlayerButton onClick={handlePlayerNavigate}> Go to the Players Page</PlayerButton>
+          <PlayerButton onClick={handlePlayerNavigate}> Create a Character</PlayerButton>
           <PlayerButton onClick={handleProfileNavigate}> Go to the Profile Page</PlayerButton>
         </LowerWrapper>
       :<></>}
