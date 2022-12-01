@@ -200,7 +200,19 @@ const uploadImageToCloud = async (req, res) => {
     res.status(400).json({status: 400,message: "Submission Failed"})
   }
 };
-
+const uploadUserImageToCloud = async (req, res) => {
+  const imageFile = req.body.data;
+  
+  try {
+    const uploadedImage = await cloudinary.uploader.upload(imageFile , {
+      upload_preset: 'User_Profile'
+    })
+    res.status(200).json({status: 200,message: "Image-Submitted", data: uploadedImage})
+  } catch (error) {
+    console.log(error)
+    res.status(400).json({status: 400,message: "Submission Failed"})
+  }
+};
 
 module.exports = {
   addNewCharacter,
@@ -208,5 +220,6 @@ module.exports = {
   getCharacter,
   getCharacterFeed,
   addNewCharacterPost,
-  uploadImageToCloud
+  uploadImageToCloud,
+  uploadUserImageToCloud
 }

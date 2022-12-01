@@ -7,7 +7,8 @@ export const UserContext = createContext(null);
 export const UserProvidor = ({ children }) => {
 
     const [profileName , setProfileName] = useState("");
-    const [loggedIn , setLoggedIn] = useState(false);
+    const [profileImage , setProfileImage] = useState("");
+    const [profileEmail , setProfileEmail] = useState("");
     const [userId , setUserId] = useState("");
     const { user, isAuthenticated } = useAuth0();
 
@@ -18,7 +19,9 @@ export const UserProvidor = ({ children }) => {
             .then((data) => {
                 console.log(data);
                 setUserId(data.data[0].client_id);
-                setProfileName(data.data[0].email);
+                setProfileEmail(data.data[0].email);
+                setProfileName(data.data[0].username);
+                setProfileImage(data.data[0].profileImage);
             })
             .catch((error) => {
                 window.alert("An Error Occured");
@@ -30,10 +33,12 @@ export const UserProvidor = ({ children }) => {
             value={ {
                 profileName,
                 setProfileName,
-                loggedIn,
-                setLoggedIn,
                 userId,
-                setUserId
+                setUserId,
+                profileImage,
+                setProfileImage,
+                profileEmail,
+                setProfileEmail
             }}
             >
                 {children}

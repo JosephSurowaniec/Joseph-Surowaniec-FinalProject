@@ -100,19 +100,5 @@ const StyledTextArea = styled.textarea`
   border-radius: 4px;
   resize: none;
   font-size: 18px;
-  /* :focus {
-    outline: none;
-  }
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-} 
-  ::-webkit-scrollbar-thumb {
-    border-radius: 25px;
-    background-color: rgba(0, 0, 0, 0.10);
-} 
-::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.15);
-}  */
 `;
 export default GeneralCharacterDetails;

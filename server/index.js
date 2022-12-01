@@ -2,8 +2,8 @@ const express = require('express');
 const helmet = require("helmet");
 const morgan = require('morgan');
 
-const { addNewUser, logInAttempt , getUser , getHomeFeed , addNewPostHomeFeed } = require('./Handlers/UserHandlers')
-const { addNewCharacter, getCharactersByUsers , getCharacter , addNewCharacterPost , getCharacterFeed , uploadImageToCloud } = require('./Handlers/CharacterHandlers');
+const { addNewUser, logInAttempt , getUser , getHomeFeed , addNewPostHomeFeed , updateUser } = require('./Handlers/UserHandlers')
+const { addNewCharacter, getCharactersByUsers , getCharacter , addNewCharacterPost , getCharacterFeed , uploadImageToCloud , uploadUserImageToCloud } = require('./Handlers/CharacterHandlers');
 const port = 8000;
 
 
@@ -30,6 +30,10 @@ express()
     .post("/characterFeed/addCharacterPost", addNewCharacterPost )
 
     .post("/testingUpload", uploadImageToCloud)
+    .post("/uploadUserImage", uploadUserImageToCloud)
+
+    .patch("/user/editUser" , updateUser)
+
     .get("*", (req, res) => {
         res.status(404).json({
         status: 404,
