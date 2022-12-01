@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Character from "./components/Character";
 import CharacterProfile from "./components/CharacterProfile";
+import Footer from "./components/Footer";
 import Header from "./components/Header";
 
 import MainPage from "./components/Mainpage";
@@ -20,7 +21,7 @@ const App = () => {
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/character/:characterId" element={<CharacterProfile />} />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </BrowserRouter>
   );
 }

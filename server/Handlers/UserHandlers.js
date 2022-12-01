@@ -185,12 +185,57 @@ const logInAttempt = async (req, res) => {
       }
   };
 
+  const updateUser = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options)
+    
+    const userIdData = req.body.userId;
+    const usernameData = req.body.username;
+    const imageData = req.body.profileImage;
+
+    const query = {client_id: `${userIdData}`};
+    const update = { $set: { username: `${usernameData}`}}
+
+    const updateImage = { $set: { profileImage: `${imageData}`}}
+
+    try {
+      // Connect client
+      await client.connect()
+      console.log("Connected")
+      const db = client.db("Final_Project_DnD")
+      if (usernameData) {
+        const updateUsername = await db.collection("Users").updateOne(query , update);
+      }
+
+      if (imageData) {
+        const updateUserImage = await db.collection("Users").updateOne(query , updateImage);
+      }
+      
+      console.log("the update went through")
+      const checkNewData = await db.collection("Users").find({client_id: `${userIdData}`}).toArray();
+
+      checkNewData
+      ?res.status(200).json({status: 200, message: "Update Successful", data: checkNewData})
+      :res.status(400).json({status: 400, message: "Bad Attempt"})
+      
+    } catch(err) {
+      res.status(400).json({
+        status: 400, 
+        message: "An Error Occured c'mon we got this",
+      })
+    } finally {
+      // disconnect from database 
+      client.close()
+      console.log("Disconnected")
+    }
+  };
+
 
 module.exports = {
     addNewUser,
     logInAttempt,
     getUser,
     getHomeFeed,
-    addNewPostHomeFeed
+    addNewPostHomeFeed,
+    updateUser
 }
 

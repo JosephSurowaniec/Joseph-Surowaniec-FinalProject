@@ -8,9 +8,10 @@ html, body {
     justify-content: center;
     font-family: sans-serif;
     margin: 0;
-        padding: 0;
-        border: 0;
-        position: relative;
+    padding: 0;
+    border: 0;
+    position: relative;
+
 }
 
 `

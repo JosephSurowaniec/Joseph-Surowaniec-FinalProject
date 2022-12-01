@@ -100,40 +100,52 @@ const MainPage = () => {
                 {!isAuthenticated ?<></>:<>{profileName} is logged In. Have Fun!</>}
                 {isAuthenticated ?<div>
                     Now logged in with Auth0
+                    <GreyBlue>GreyBlue</GreyBlue>
+                    <DarkGrey></DarkGrey>
+                    <Black></Black>
+                    <Steel></Steel>
+                    <Cranberry></Cranberry>
                     <Textbox>
                         <MiniHeader>Home</MiniHeader>
-                        <button onClick={checkVitals}>
+                        {/* <button onClick={checkVitals}>
                               Testing User Character
-                          </button>
-                        {userCharacters?<form>
-                          <select value={postCharacter} onChange={(e) => {handlePostedCharacter(e.target.value)} }>
-                            {userCharacters.map((element) => {
-                              return (
-                                <option key={Math.floor(Math.random()*140000000000000)} value={element._id}>
-                                  {element.characterInformation.characterName}
-                                </option>
-                              )
-                            })}
-                          </select>
-                        </form>
-                        :<></>}
+                          </button> */}
+                        
                         <form onSubmit={handleSubmit}>
                         <StyledTextInput>
                           <StyledTextArea name="message" id="message" value={formData} placeholder="Share Your Characters!" onChange={(e) => handleChange(e.target.value)} />
-                          <div>
-                            THis is where to display to selected Character
+                          <CharacterSelecterWrapper>
+                            Choose a character to add to your post
+                            <div>
+                              {userCharacters?<form>
+                                <select value={postCharacter} onChange={(e) => {handlePostedCharacter(e.target.value)} }>
+                                  <option value={""}>Select a character</option>
+                                  {userCharacters.map((element) => {
+                                    return (
+                                      <option key={Math.floor(Math.random()*140000000000000)} value={element._id}>
+                                        {element.characterInformation.characterName}
+                                      </option>
+                                    )
+                                  })}
+                                </select>
+                              </form>
+                              :<></>}
+                            </div>
+                            
+                          </CharacterSelecterWrapper>
+                          <DisplaySelectedCharacter>
                             {userCharacters?userCharacters.filter((el) => {
-                          return(
-                            el._id === postCharacter
-                            )}).map((element) => {
-                              return(
-                                <div key={Math.floor(Math.random()*140000000000000)}>
-                                  <CharacterFeed characterDetails={element.characterInformation} characterId={element._id}/>
-                                </div>
-                                
-                              )
-                            }):<div>No Character Chosen</div>}
-                          </div>
+                                return(
+                                  el._id === postCharacter
+                                  )}).map((element) => {
+                                    return(
+                                      <div key={Math.floor(Math.random()*140000000000000)}>
+                                        <CharacterFeed characterDetails={element.characterInformation} characterId={element._id}/>
+                                      </div>
+                                      
+                                    )
+                                  }):<div>No Character Chosen</div>}
+                          </DisplaySelectedCharacter>
                         </StyledTextInput>
                         <InputArea>
                             {
@@ -160,7 +172,7 @@ const MainPage = () => {
                         return (
                             
                             <FeedArea key={Math.floor(Math.random()*140000000000000)}>
-                                <FeedMessage message={feedDetails.message} character={feedDetails.character} />
+                                <FeedMessage message={feedDetails.message} character={feedDetails.character} profileName={profileName} userId={userId} />
                             </FeedArea>
                             
                         )
@@ -186,7 +198,9 @@ const MainPage = () => {
 };
 
 const Wrapper = styled.div`
+margin: 0 auto;
 padding: 35px;
+width: 75%;
 `;
 const Textbox = styled.div`
 display: flex;
@@ -195,16 +209,56 @@ border-bottom: 10px solid rgba(0, 0, 0, 0.15);
 `;
 const StyledTextInput=styled.div`
 display: flex;
-border: 1px solid green;
+justify-content: space-around;
+
+padding: 25px;
 `
 const MiniHeader = styled.div`
-border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+border-bottom: 5px solid #595959;
+display: flex;
+justify-content: center;
 padding: 8px 8px 8px 15px;
 font-size: 25px;
 font-weight: bold;
+margin-bottom: 10px;
 `;
+const CharacterSelecterWrapper = styled.div`
 
+display: flex;
+flex-direction: column;
+align-items: center;
+border-radius: 15px;
+padding: 5px;
+box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.52);
+`;
+const DisplaySelectedCharacter = styled.div`
 
+`;
+const GreyBlue = styled.div`
+background-color: #ACCBE1;
+width: 15px;
+height: 15px;
+`;
+const DarkGrey = styled.div`
+background-color: #e5e5e5;
+width: 15px;
+height: 15px;
+`;
+const Black = styled.div`
+background-color: #595959;
+width: 15px;
+height: 15px;
+`;
+const Steel = styled.div`
+background-color: #7c98b3;
+width: 15px;
+height: 15px;
+`;
+const Cranberry = styled.div`
+background-color: #cc444b;
+width: 15px;
+height: 15px;
+`;
 const LessWords = styled.h3`
 font-size: 15px;
 color: rgba(215, 165, 0, 0.92);
@@ -218,7 +272,6 @@ color: red;
 
 const FeedArea = styled.div`
 display: flex;
-background-color: aquamarine;
 justify-content: center;
 margin: 5px;
 padding: 5px;
@@ -262,7 +315,7 @@ align-items: center;
 `
 const StyledSubmit = styled.button`
 height: 35px;
-background-color: pink;
+background-color: #cc444b;
 padding: 2px 15px 2px 15px;
 color: white;
 font-size: 15px;
@@ -282,6 +335,19 @@ const StyledDiv = styled.div`
   
   display: flex;
   flex-direction: column-reverse;
+  height: 60vh;
+  overflow-y: auto;
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+} 
+  ::-webkit-scrollbar-thumb {
+    border-radius: 25px;
+    background-color: rgba(0, 0, 0, 0.10);
+} 
+::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.15);
+} 
   `;
 
 export default MainPage;
