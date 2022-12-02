@@ -9,7 +9,16 @@ const initialState = {
     selectedRace: "",
     classData:"",
     characterImageId: "",
+    level:"",
     abilityScores:{
+        strength: 8,
+        dexterity: 8,
+        constitution: 8,
+        intelligence: 8,
+        wisdom: 8,
+        charisma: 8
+    },
+    modifiedAbilityScores:{
         strength: 8,
         dexterity: 8,
         constitution: 8,
@@ -94,6 +103,25 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 abilityScores:{...state.abilityScores, charisma: action.data}
+
+            }
+        }
+        case "addLevel": {
+            return {
+                ...state,
+                level: action.data
+            }
+        }
+        case "updateModStats": {
+            return {
+                ...state,
+                modifiedAbilityScores:{...state.modifiedAbilityScores,
+                                        strength: action.data.str,
+                                        dexterity: action.data.dex,
+                                        constitution: action.data.con,
+                                        intelligence: action.data.int,
+                                        wisdom: action.data.wis,
+                                        charisma: action.data.cha}
 
             }
         }
@@ -202,6 +230,18 @@ export const CharacterProvidor = ({ children }) => {
                 data
             })
     };
+    const updateLevel = (data) => {
+        dispatch({
+            type: "addLevel",
+            data
+        })
+};
+    const updateModifiedStats = (data) => {
+        dispatch({
+            type: "updateModStats",
+            data
+        })
+};
 
     return (
         <CharacterContext.Provider 
@@ -209,7 +249,14 @@ export const CharacterProvidor = ({ children }) => {
                 characterClasses,
                 characterRaces,
                 state,
-                actions: {updateCharacterName, updateRace, updateClass, updateClassDetails, updateCharacterImage, updateStr, updateDex, updateCon, updateInt, updateWis, updateCha }
+                actions: {updateCharacterName,
+                            updateRace,
+                            updateClass, 
+                            updateClassDetails, 
+                            updateCharacterImage, 
+                            updateStr, updateDex, updateCon, updateInt, updateWis, updateCha , 
+                            updateModifiedStats,
+                            updateLevel }
             }}
             >
                 {children}

@@ -24,6 +24,9 @@ const GeneralCharacterDetails = () => {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setPreviewSource(reader.result);
+        console.log(file.name);
+  
+        
       }
     };
 
@@ -38,7 +41,7 @@ const GeneralCharacterDetails = () => {
     };
 
     const uploadImage =  async (base64EncodedImage) => {
-      console.log(base64EncodedImage);
+
       try {
           await fetch(`/testingUpload`, {
             "method": "POST",
@@ -58,7 +61,7 @@ const GeneralCharacterDetails = () => {
     };
 
     return(
-        <div>
+        <GeneralWrapper>
           <div>
             <StyledTextArea name="characterName" id="name" value={state.characterName} placeholder="What's Your Name?" onChange={(e) => actions.updateCharacterName(e.target.value)} />
           </div>
@@ -68,27 +71,45 @@ const GeneralCharacterDetails = () => {
               <button type="submit">Submit photo</button>
             </form>
             {previewSource ? 
-            <div>
+            <PreviewImageWrapper>
               <StyledPreviewImage src={previewSource} alt="uploaded image" />
-            </div>
+            </PreviewImageWrapper>
           :<></>}
           </SubmitPictureArea>
-        </div>
+        </GeneralWrapper>
     )
 }
 
-
+const GeneralWrapper = styled.div`
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #e5e5e5;
+  border-right: 3px solid #cc444b;
+  border-bottom: 3px solid #cc444b;
+  padding: 50px;
+  border-radius: 15px;
+`;
 const SubmitPictureArea = styled.div`
-border: 5px solid black;
+
 border-radius: 10px;
 padding: 25px;
 margin: 15px;
 `;
 
+const PreviewImageWrapper = styled.div`
+display: flex;
+justify-content: center;
+margin-top: 25px;
+`;
 const StyledPreviewImage = styled.img`
-width: 200px;
-height: 200px;
-`
+width: auto;
+max-height: 500px;
+position: absolute;
+border-radius: 15px;
+box-shadow: -9px 5px 15px 5px #000000;
+`;
 
 const StyledTextArea = styled.textarea`
 

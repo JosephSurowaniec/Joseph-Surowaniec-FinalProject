@@ -21,23 +21,25 @@ const ClassPage = ({ showModal, setShowModal, classInfo, classAbilities}) => {
             {showModal ? 
             <Background>
                 <ModalWrapper showModal={showModal}>
-                    <ScrollArea>{classInfo.name}
+                    <ScrollArea>
+                    <StyledClassName>{classInfo.name}</StyledClassName>
                     <div>
                         {classAbilities.map((element) => {
                             return(
                                 <div key={Math.floor(Math.random() * 1700000000)}>
-                                    <div>{element.level}</div>
-                                    <div>{element.features.map((el) => {
+                                    <StyledLevelNumber>{element.level}</StyledLevelNumber>
+                                    <StyledLevelDetails>{element.features[0] ?element.features.map((el) => {
                                         return(
                                             <div key={Math.floor(Math.random() * 1700000000)}>{el.name}</div>
                                         )
-                                    })}</div>
+                                    }) 
+                                    :<div>No New Features</div>}</StyledLevelDetails>
                                 </div>
                             )
                         })}
                     </div>
                     </ScrollArea>
-                    <button onClick={submitClass}>Click me</button>
+                    <StyledConfirmButton onClick={submitClass}>Click me</StyledConfirmButton>
                     <StyledButton onClick={() => setShowModal(prev => !prev)}>Exit</StyledButton>        
                 </ModalWrapper>
                 
@@ -77,8 +79,27 @@ z-index: 10;
 border-radius: 10px;
 `;
 
+const StyledClassName = styled.div`
+border-bottom: 1px solid red;
+font-size: 25px;
+display: flex;
+justify-content: center;
+margin-bottom: 5px;
+`;
+const StyledLevelNumber = styled.div`
+border-bottom: 1px solid #7c98b3;
+margin: 10px;
+`;
+const StyledLevelDetails = styled.div`
+padding: 25px;
+background-color: #e5e5e5;
+border: none;
+border-radius: 15px;
+`;
 const ScrollArea = styled.div`
 overflow-y: scroll;
+padding: 25px;
+margin: 25px 0 25px 0;
 `;
 const StyledButton = styled.button`
 padding: 15px;
@@ -87,6 +108,12 @@ position: absolute;
 right: 0;
 top: 0;
 margin: 25px;
+`;
+
+const StyledConfirmButton = styled.button`
+padding: 15px;
+border-radius: 25px;
+margin: 0 0 25px 0;
 `;
 
 

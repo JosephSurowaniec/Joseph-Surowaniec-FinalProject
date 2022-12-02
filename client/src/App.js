@@ -21,7 +21,7 @@ const App = () => {
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/character/:characterId" element={<CharacterProfile />} />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
     </BrowserRouter>
   );
 }

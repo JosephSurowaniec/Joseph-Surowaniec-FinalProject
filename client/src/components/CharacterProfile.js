@@ -6,6 +6,7 @@ import { UserContext } from "./UserContext";
 import dragonBornImage from "./dragonbornPlaceholder.jpg"
 import {Image} from 'cloudinary-react';
 import CharacterSkills from "./CharacterSkills";
+import Features from "./Features";
 
 const CharacterProfile = () => {
 
@@ -112,7 +113,7 @@ const CharacterProfile = () => {
             :
             <InnerWrapper>
                 <ImageWrapper>
-                    {specificCharacterInfo.characterImageId ?<Image cloudName="dfigamsk5" publicId={specificCharacterInfo.characterImageId}/>
+                    {specificCharacterInfo.characterImageId ?<Image cloudName="dfigamsk5" publicId={specificCharacterInfo.characterImageId} style={{height:300}}/>
                     :<Image cloudName="dfigamsk5" publicId="Testing_Setup/unknownadventurer_fuanqy" />}
                 </ImageWrapper>
             <ScrollWrapper>
@@ -136,7 +137,7 @@ const CharacterProfile = () => {
                                 Name: {specificCharacterInfo.characterName}
                             </TextDisplay>
                             <TextDisplay>
-                                Class: {specificCharacterInfo.selectedClass.name}
+                                Class: <LevelSpan>Lv{specificCharacterInfo.level}</LevelSpan>{specificCharacterInfo.selectedClass.name}
                             </TextDisplay>
                             <TextDisplay>
                                 Race: {specificCharacterInfo.selectedRace.name}
@@ -144,12 +145,12 @@ const CharacterProfile = () => {
                             <StatsWrapper>
                                 Stats Location
                                 <button onClick={showInfo}></button>
-                                <StatBox>Strength <div>{specificCharacterInfo.abilityScores.strength}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.abilityScores.strength]}</ModifierWrapper></StatBox>
-                                <StatBox>Dex <div>{specificCharacterInfo.abilityScores.dexterity}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.abilityScores.dexterity]}</ModifierWrapper></StatBox>
-                                <StatBox>Con <div>{specificCharacterInfo.abilityScores.constitution}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.abilityScores.constitution]}</ModifierWrapper></StatBox>
-                                <StatBox>Int <div>{specificCharacterInfo.abilityScores.intelligence}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.abilityScores.intelligence]}</ModifierWrapper></StatBox>
-                                <StatBox>Wisdom <div>{specificCharacterInfo.abilityScores.wisdom}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.abilityScores.wisdom]}</ModifierWrapper></StatBox>
-                                <StatBox>Charisma <div>{specificCharacterInfo.abilityScores.charisma}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.abilityScores.charisma]}</ModifierWrapper></StatBox>
+                                <StatBox>Strength <div>{specificCharacterInfo.modifiedAbilityScores.strength}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.strength]}</ModifierWrapper></StatBox>
+                                <StatBox>Dex <div>{specificCharacterInfo.modifiedAbilityScores.dexterity}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.dexterity]}</ModifierWrapper></StatBox>
+                                <StatBox>Con <div>{specificCharacterInfo.modifiedAbilityScores.constitution}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.constitution]}</ModifierWrapper></StatBox>
+                                <StatBox>Int <div>{specificCharacterInfo.modifiedAbilityScores.intelligence}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.intelligence]}</ModifierWrapper></StatBox>
+                                <StatBox>Wisdom <div>{specificCharacterInfo.modifiedAbilityScores.wisdom}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.wisdom]}</ModifierWrapper></StatBox>
+                                <StatBox>Charisma <div>{specificCharacterInfo.modifiedAbilityScores.charisma}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.charisma]}</ModifierWrapper></StatBox>
                             </StatsWrapper>
                             
                         </TextWrapper>
@@ -159,22 +160,22 @@ const CharacterProfile = () => {
                                     Skills
                                     
                                 </StyledSubSectionButton>
-                                <StyledSubSectionButton onClick={() => setSubSection("Equipment")}>
+                                {/* <StyledSubSectionButton onClick={() => setSubSection("Equipment")}>
                                     Equipment
                                 </StyledSubSectionButton>
                                 <StyledSubSectionButton onClick={() => setSubSection("Spells")}>
                                     Spells
-                                </StyledSubSectionButton>
+                                </StyledSubSectionButton> */}
                                 <StyledSubSectionButton onClick={() => setSubSection("Features")}>
                                     Features
                                 </StyledSubSectionButton>
                             </SubSectionButtonWrapper>
-                            <div>
-                                {currentSubSection === "Skills"?<div><CharacterSkills modifiers={ModifierValues} stats={specificCharacterInfo.abilityScores} /></div>:<></>}
-                                {currentSubSection === "Equipment"?<div>This is the Equipment Tab</div>:<></>}
-                                {currentSubSection === "Spells"?<div>This is the Spells Tab</div>:<></>}
-                                {currentSubSection === "Features"?<div>This is the Features Tab</div>:<></>}
-                            </div>
+                            <TestWrapper>
+                                {currentSubSection === "Skills"?<ChangedContent><CharacterSkills modifiers={ModifierValues} stats={specificCharacterInfo.abilityScores} /></ChangedContent>:<></>}
+                                {/* {currentSubSection === "Equipment"?<div>This is the Equipment Tab</div>:<></>}
+                                {currentSubSection === "Spells"?<div>This is the Spells Tab</div>:<></>} */}
+                                {currentSubSection === "Features"?<ChangedContent><Features levelInfo ={specificCharacterInfo.classData} level={specificCharacterInfo.level}/></ChangedContent>:<></>}
+                            </TestWrapper>
                             
                         </SubSectionWrapper>
                         </CharacterInfoWrapper>
@@ -185,17 +186,17 @@ const CharacterProfile = () => {
                         {currentSection === "Comment" ?
                             <div>
                             <Textbox>
-                                    <MiniHeader>Home</MiniHeader>
+                                    <MiniHeader>Character Chat</MiniHeader>
                                 
                                     <form onSubmit={handleSubmit}>
-                                    <StyledTextInput><StyledTextArea name="message" id="message" value={formData} placeholder="What's On Your Mind?" onChange={(e) => handleChange(e.target.value)} /></StyledTextInput>
+                                    <StyledTextInput><StyledTextArea name="message" id="message" value={formData} placeholder="Comment on this Character" onChange={(e) => handleChange(e.target.value)} /></StyledTextInput>
                                     <InputArea>
                                         {
-                                        formData.length > 224
-                                            ?<>{formData.length > 280 ?<OverLimit>{280 - formData.length}</OverLimit> : <LessWords>{280 - formData.length}</LessWords>} </>
-                                            :<CharacterCount>{280 - formData.length}</CharacterCount>
+                                        formData.length > 80
+                                            ?<>{formData.length > 100 ?<OverLimit>{100 - formData.length}</OverLimit> : <LessWords>{100 - formData.length}</LessWords>} </>
+                                            :<CharacterCount>{100 - formData.length}</CharacterCount>
                                         }
-                                        <StyledSubmit type="submit" disabled={formData.length > 280}>Submit</StyledSubmit>
+                                        <StyledSubmit type="submit" disabled={formData.length > 100}>Submit</StyledSubmit>
                                     </InputArea>
                                     </form>
                                     
@@ -214,7 +215,7 @@ const CharacterProfile = () => {
                                     return (
                                         
                                         <FeedArea key={Math.floor(Math.random()*140000000000000)}>
-                                            <FeedMessage message={feedDetails.message} />
+                                            <FeedMessage message={feedDetails.message} profileName={profileName} />
                                         </FeedArea>
                                         
                                     )
@@ -238,26 +239,35 @@ const CharacterProfile = () => {
 };
 
 const Wrapper = styled.div`
-
+border: 1px solid black;
 margin: 25px;
+height: 90vh;
 `;
 const InnerWrapper = styled.div`
-border: 3px solid green;
+
 margin: 25px;
 display: flex;
+height: 65%;
 `;
 
 const SectionWrapper = styled.div`
-border: 3px solid red;
 display: flex;
-justify-content: space-between;
 flex: 1;
-`
-
+`;
+const LevelSpan = styled.span`
+font-size: 15px;
+`;
 const ContentWrapper = styled.div`
 display: flex;
 flex: 1;
-`
+`;
+
+const TestWrapper = styled.div`
+flex: 1;
+`;
+const ChangedContent = styled.div`
+height: 100%;
+`;
 const Banner = styled.div`
 display: flex;
 background-color: black;
@@ -279,6 +289,7 @@ color: red;
 `;
 const SubSectionWrapper = styled.div`
 display: flex;
+flex: 1;
 `
 const SubSectionButtonWrapper = styled.div`
 display: flex;
@@ -287,11 +298,13 @@ background-color: black;
 color: white;
 `
 const ImageWrapper = styled.div`
-border: 1px solid blue;
+
 padding: 25px;
 `;
 const CharacterInfoWrapper = styled.div`
 display: flex;
+flex: 1;
+
 `
 const ScrollWrapper = styled.div`
 display: flex;
@@ -301,7 +314,7 @@ width: 75%;
 
 
 const TextWrapper = styled.div`
-border: 1px solid red;
+
 padding: 25px;
 width: 350px;
 `;
@@ -318,12 +331,13 @@ column-gap: 8rem;
 const StatBox = styled.div`
 width: 100px;
 height: 100px;
+margin-top: 15px;
 display: flex;
 justify-content: center;
 flex-direction: column;
 align-items: center;
-clip-path: polygon(20% 0%, 80% 0%, 100% 20%, 100% 80%, 80% 100%, 20% 100%, 0% 80%, 0% 20%);
-border: 4px solid black;
+border-radius: 35px;
+border: 4px solid #595959;
 `;
 const ModifierWrapper = styled.div`
 border: 3px solid red;
@@ -363,7 +377,6 @@ color: red;
 
 const FeedArea = styled.div`
 display: flex;
-background-color: aquamarine;
 justify-content: center;
 margin: 5px;
 padding: 5px;
