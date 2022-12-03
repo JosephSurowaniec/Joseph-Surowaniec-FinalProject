@@ -2,8 +2,8 @@ const express = require('express');
 const helmet = require("helmet");
 const morgan = require('morgan');
 
-const { addNewUser, logInAttempt , getUser , getHomeFeed , addNewPostHomeFeed , updateUser } = require('./Handlers/UserHandlers')
-const { addNewCharacter, getCharactersByUsers , getCharacter , addNewCharacterPost , getCharacterFeed , uploadImageToCloud , uploadUserImageToCloud } = require('./Handlers/CharacterHandlers');
+const { addNewUser, logInAttempt , getUser , getHomeFeed , addNewPostHomeFeed , updateUser , getUserById , getProfileById } = require('./Handlers/UserHandlers');
+const { addNewCharacter, getCharactersByUsers , getCharacter , addNewCharacterPost , getCharacterFeed , getProgressFeed, addProgressPost, uploadImageToCloud , uploadUserImageToCloud } = require('./Handlers/CharacterHandlers');
 const port = 8000;
 
 
@@ -21,6 +21,10 @@ express()
     .post("/user",  logInAttempt)
     .get("/profile/:userId", getCharactersByUsers )
     .get("/character/:characterId", getCharacter )
+
+    .get("/user/profile/:userId" , getProfileById)
+
+    .get("/user/feed/:userId" , getUserById)
     .get("/user/:userEmail", getUser)
 
     .get("/homefeed", getHomeFeed )
@@ -28,6 +32,9 @@ express()
 
     .get("/characterFeed/:characterId", getCharacterFeed )
     .post("/characterFeed/addCharacterPost", addNewCharacterPost )
+
+    .get("/characterFeed/progression/:characterId", getProgressFeed )
+    .post("/characterFeed/addProgressPost", addProgressPost )
 
     .post("/testingUpload", uploadImageToCloud)
     .post("/uploadUserImage", uploadUserImageToCloud)

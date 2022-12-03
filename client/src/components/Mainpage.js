@@ -15,6 +15,19 @@ const MainPage = () => {
 
     useEffect(() => {
 
+      if (isAuthenticated) {
+
+        fetch(`/profile/${userId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                setUserCharacters(data.data);
+            })
+            .catch((error) => {
+                window.alert("An Error Occured");
+            });
+      }
+
         fetch(`/homefeed`)
         .then(res => res.json())
         .then(data => {
@@ -24,21 +37,12 @@ const MainPage = () => {
           console.log("The MainFeed Broke")
       });
 
-      fetch(`/profile/${userId}`)
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data);
-                setUserCharacters(data.data);
-            })
-            .catch((error) => {
-                window.alert("An Error Occured");
-            });
+      
 
     }, []);
 
     const handleLogIn = () => {
-        console.log(JSON.stringify(user));
-        console.log(userId);
+        console.log(homeFeed);
     };
 
     const handleChange = (value) => {
@@ -60,7 +64,7 @@ const MainPage = () => {
               "Accept": "application/json",
               "Content-Type": "application/json"
           },
-          body: JSON.stringify({status : formData, userId : userId, characterId : postCharacter})
+          body: JSON.stringify({status : formData, userId : userId, characterId : postCharacter , profileName : profileName})
       })
           .then(res => {
               return res.json()
@@ -114,25 +118,6 @@ const MainPage = () => {
                         <form onSubmit={handleSubmit}>
                         <StyledTextInput>
                           <StyledTextArea name="message" id="message" value={formData} placeholder="Share Your Characters!" onChange={(e) => handleChange(e.target.value)} />
-                          <CharacterSelecterWrapper>
-                            Choose a character to add to your post
-                            <div>
-                              {userCharacters?<form>
-                                <select value={postCharacter} onChange={(e) => {handlePostedCharacter(e.target.value)} }>
-                                  <option value={""}>Select a character</option>
-                                  {userCharacters.map((element) => {
-                                    return (
-                                      <option key={Math.floor(Math.random()*140000000000000)} value={element._id}>
-                                        {element.characterInformation.characterName}
-                                      </option>
-                                    )
-                                  })}
-                                </select>
-                              </form>
-                              :<></>}
-                            </div>
-                            
-                          </CharacterSelecterWrapper>
                           <DisplaySelectedCharacter>
                             {userCharacters?userCharacters.filter((el) => {
                                 return(
@@ -156,6 +141,25 @@ const MainPage = () => {
                             <StyledSubmit type="submit" disabled={formData.length > 150}>Submit</StyledSubmit>
                         </InputArea>
                         </form>
+                        <CharacterSelecterWrapper>
+                            Choose a character to add to your post
+                            <div>
+                              {userCharacters?<form>
+                                <select value={postCharacter} onChange={(e) => {handlePostedCharacter(e.target.value)} }>
+                                  <option value={""}>Select a character</option>
+                                  {userCharacters.map((element) => {
+                                    return (
+                                      <option key={Math.floor(Math.random()*140000000000000)} value={element._id}>
+                                        {element.characterInformation.characterName}
+                                      </option>
+                                    )
+                                  })}
+                                </select>
+                              </form>
+                              :<></>}
+                            </div>
+                            
+                          </CharacterSelecterWrapper>
                         
                         
                     </Textbox>
@@ -172,7 +176,7 @@ const MainPage = () => {
                         return (
                             
                             <FeedArea key={Math.floor(Math.random()*140000000000000)}>
-                                <FeedMessage message={feedDetails.message} character={feedDetails.character} profileName={profileName} userId={userId} />
+                                <FeedMessage message={feedDetails.message} character={feedDetails.character} userId={feedDetails.userId} displayName={feedDetails.userDisplayName} />
                             </FeedArea>
                             
                         )

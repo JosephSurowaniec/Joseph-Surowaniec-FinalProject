@@ -7,6 +7,7 @@ import dragonBornImage from "./dragonbornPlaceholder.jpg"
 import {Image} from 'cloudinary-react';
 import CharacterSkills from "./CharacterSkills";
 import Features from "./Features";
+import Achievement from "./Achievement";
 
 const CharacterProfile = () => {
 
@@ -14,7 +15,9 @@ const CharacterProfile = () => {
     const {characterId} = useParams();
     const [specificCharacterInfo, setSpecificCharacterInfo] = useState("");
     const [formData, setFormData] = useState("");
+    const [progressionData, setProgressionData] = useState("");
     const [characterFeed, setCharacterFeed ] = useState("");
+    const [progressFeed , setProgressFeed] = useState("");
     const [currentSection, setCurrentSection ] = useState("General");
     const [currentSubSection, setCurrentSubSection ] = useState("Skills")
 
@@ -27,6 +30,7 @@ const CharacterProfile = () => {
         console.log(characterId)
         console.log(" second check-in here")
         if (characterId) {
+
             fetch(`/character/${characterId}`)
             .then((res) => res.json())
             .then((data) => {
@@ -36,11 +40,14 @@ const CharacterProfile = () => {
             .catch((error) => {
                 window.alert(error);
             });
+
+
         }
         
     }, [characterId]);
 
     useEffect(() => {
+
         fetch(`/characterFeed/${characterId}`)
         .then(res => res.json())
         .then(data => {
@@ -48,7 +55,17 @@ const CharacterProfile = () => {
 
         }).catch((error) => {
           console.log("The Character Feed Broke")
-      })
+      });
+
+      fetch(`/characterFeed/progression/${characterId}`)
+                .then(res => res.json())
+                .then(data => {
+                    setProgressFeed(data.data);
+                    
+                }).catch((error) => {
+          console.log("The Character Feed Broke")
+      });
+
     }, []);
 
     const showInfo = () => {
@@ -61,8 +78,46 @@ const CharacterProfile = () => {
         setFormData(value)
       };
 
+      const handleChangeProgression = (value) => {
+        setProgressionData(value)
+      };
+
       const resetTextArea = () => {
         setFormData("");
+      };
+
+      const resetTextArea2 = () => {
+        setProgressionData("");
+      };
+
+      const handleSubmitProgression = (e) => {
+        e.preventDefault();
+        resetTextArea2();
+        console.log("working");
+
+        fetch("/characterFeed/addProgressPost", {
+          method: "POST",
+          headers: {
+              "Accept": "application/json",
+              "Content-Type": "application/json"
+          },
+          body: JSON.stringify({status : progressionData, characterId : characterId , profileName : profileName})
+      })
+          .then(res => {
+              return res.json()
+          })
+          .then((data) => {
+                fetch(`/characterFeed/progression/${characterId}`)
+                .then(res => res.json())
+                .then(data => {
+                    setProgressFeed(data.data);
+                    
+                });
+              })
+          .catch((error) => {
+            console.log("The MainFeed POST Broke");
+          })
+
       };
       
       const handleSubmit = (e) => {
@@ -76,7 +131,7 @@ const CharacterProfile = () => {
               "Accept": "application/json",
               "Content-Type": "application/json"
           },
-          body: JSON.stringify({status : formData, characterId : characterId})
+          body: JSON.stringify({status : formData, characterId : characterId , profileName : profileName})
       })
           .then(res => {
               return res.json()
@@ -97,6 +152,10 @@ const CharacterProfile = () => {
 
       const testHomefeed = () => {
         console.log(characterFeed);
+      };
+
+      const testProgressfeed = () => {
+        console.log(progressFeed);
       };
 
       const setSection = (section) => {
@@ -181,14 +240,57 @@ const CharacterProfile = () => {
                         </CharacterInfoWrapper>
                         :<></>}
                         {currentSection === "Progress" ?
-                        <div>This is the to mark the progress of your Hero</div>
+                        <div>
+                            {/* <Achievement /> */}
+                            Progress Tab
+                            <StyledCommentSection>
+                            <Textbox>
+                                    <MiniHeader>Progression Chat</MiniHeader>
+                                
+                                    <StyledForm onSubmit={handleSubmitProgression}>
+                                    <StyledTextInput><StyledTextArea name="message" id="message" value={progressionData} placeholder="Comment on this Character" onChange={(e) => handleChangeProgression(e.target.value)} /></StyledTextInput>
+                                    <InputArea>
+                                        {
+                                        progressionData.length > 80
+                                            ?<>{progressionData.length > 100 ?<OverLimit>{100 - progressionData.length}</OverLimit> : <LessWords>{100 - progressionData.length}</LessWords>} </>
+                                            :<CharacterCount>{100 - progressionData.length}</CharacterCount>
+                                        }
+                                        <StyledSubmit type="submit" disabled={progressionData.length > 100}>Submit</StyledSubmit>
+                                    </InputArea>
+                                    </StyledForm>
+                                    
+                                    
+                                </Textbox>
+
+                                <PersonalCommentSection>
+                                    <button onClick={testProgressfeed}></button>
+                                    {!progressFeed[0]
+                                    ?<div>Loading</div>
+                                    :
+                                    <>
+                                    <StyledDiv>{progressFeed.map((feedDetails) => {
+                                    return (
+                                        
+                                        <FeedArea key={Math.floor(Math.random()*140000000000000)}>
+                                            <FeedMessage message={feedDetails.message} profileName={profileName} userId={feedDetails.userId} displayName={feedDetails.displayName} />
+                                        </FeedArea>
+                                        
+                                    )
+                                    
+                                    })}</StyledDiv>
+                                
+                                </>
+                                }
+                                </PersonalCommentSection>
+                            </StyledCommentSection>
+                        </div>
                         :<></>}
                         {currentSection === "Comment" ?
-                            <div>
+                            <StyledCommentSection>
                             <Textbox>
                                     <MiniHeader>Character Chat</MiniHeader>
                                 
-                                    <form onSubmit={handleSubmit}>
+                                    <StyledForm onSubmit={handleSubmit}>
                                     <StyledTextInput><StyledTextArea name="message" id="message" value={formData} placeholder="Comment on this Character" onChange={(e) => handleChange(e.target.value)} /></StyledTextInput>
                                     <InputArea>
                                         {
@@ -198,24 +300,22 @@ const CharacterProfile = () => {
                                         }
                                         <StyledSubmit type="submit" disabled={formData.length > 100}>Submit</StyledSubmit>
                                     </InputArea>
-                                    </form>
+                                    </StyledForm>
                                     
                                     
                                 </Textbox>
 
-                                <div>
+                                <PersonalCommentSection>
                                     <button onClick={testHomefeed}></button>
                                     {!characterFeed[0]
                                     ?<div>Loading</div>
                                     :
-                                    <>  
-                                    <h1>Testing Area</h1>
-                                    
+                                    <>
                                     <StyledDiv>{characterFeed.map((feedDetails) => {
                                     return (
                                         
                                         <FeedArea key={Math.floor(Math.random()*140000000000000)}>
-                                            <FeedMessage message={feedDetails.message} profileName={profileName} />
+                                            <FeedMessage message={feedDetails.message} profileName={profileName} userId={feedDetails.userId} displayName={feedDetails.displayName} />
                                         </FeedArea>
                                         
                                     )
@@ -224,8 +324,8 @@ const CharacterProfile = () => {
                                 
                                 </>
                                 }
-                                </div>
-                            </div>
+                                </PersonalCommentSection>
+                            </StyledCommentSection>
                             :<></>}
                         
                         </SectionWrapper>
@@ -249,7 +349,15 @@ margin: 25px;
 display: flex;
 height: 65%;
 `;
-
+const PersonalCommentSection = styled.div`
+padding: 25px;
+display: flex;
+flex-direction: column;
+align-items: center;
+height: 70%;
+width: auto;
+overflow-y: auto;
+`;
 const SectionWrapper = styled.div`
 display: flex;
 flex: 1;
@@ -351,7 +459,6 @@ font-size: 35px;
 const Textbox = styled.div`
 display: flex;
 flex-direction: column;
-border-bottom: 10px solid rgba(0, 0, 0, 0.15);
 `;
 const StyledTextInput=styled.div`
 
@@ -385,7 +492,14 @@ padding: 5px;
 const CharacterCount = styled.h3`
 font-size: 15px;
 opacity: 50%;
-`
+`;
+
+const StyledCommentSection = styled.div`
+display: flex;
+justify-content: center;
+margin: 0 auto;
+padding-top: 10px;
+`;
 const StyledTextArea = styled.textarea`
 
   width: 500px;
@@ -436,6 +550,9 @@ margin-left: 15px;
 }
 `;
 
+const StyledForm = styled.form`
+border-bottom: 10px solid rgba(0, 0, 0, 0.15);
+`;
 const StyledDiv = styled.div`
   
   display: flex;
