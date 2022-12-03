@@ -12,21 +12,40 @@ export const UserProvidor = ({ children }) => {
     const [userId , setUserId] = useState("");
     const { user, isAuthenticated } = useAuth0();
 
-    if (isAuthenticated) {
+
+    useEffect(() => {
+        
+        if (isAuthenticated) {
         console.log(user.email);
+        console.log("checking the email now")
         fetch(`/user/${user.email}`)
-            .then((res) => res.json())
-            .then((data) => {
-                console.log(data);
-                setUserId(data.data[0].client_id);
-                setProfileEmail(data.data[0].email);
-                setProfileName(data.data[0].username);
-                setProfileImage(data.data[0].profileImage);
-            })
-            .catch((error) => {
-                window.alert("An Error Occured");
-            });
+                        .then((res) => res.json())
+                        .then((data) => {
+                            console.log(data);
+                            console.log("received Data");
+                            setUserId(data.data[0]._id);
+                            setProfileEmail(data.data[0].email);
+                            setProfileImage(data.data[0].profileImage);
+
+                            if (data.data[0].username) {
+                                setProfileName(data.data[0].username);
+                            } else {
+                                setProfileName(user.nickname);
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                            // window.alert("An Error in the UserContext");
+                        });
+
+
     }
+            
+
+
+    }, [isAuthenticated]);
+
+    
 
     return (
         <UserContext.Provider 

@@ -22,6 +22,7 @@ const Header = () => {
   const handleProfileNavigate = () => {
     console.log("Navigate to the profile tab");
     navigate(`/profile/${userId}`);
+    // navigate(0);
   };
 
   const handlePlayerNavigate = () => {

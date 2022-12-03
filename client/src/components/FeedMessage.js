@@ -5,7 +5,21 @@ import styled from "styled-components";
 const FeedMessage = (content) => {
 
     const [contentCharacter , setContentCharacter] = useState("");
+    
+
     const navigate = useNavigate();
+
+    // useEffect(() => {
+    //     fetch(`/user/${content.userId}`)
+    //         .then((res) => res.json())
+    //         .then((data) => {
+    //             setPostedUsername(data.data[0])
+    //         })
+    //         .catch((error) => {
+    //             window.alert("An Error Occured");
+    //         });
+    // }, []);
+
     
     const showContent = () => {
         console.log(content);
@@ -34,7 +48,8 @@ const FeedMessage = (content) => {
                 {content.message}
             </MessageWrapper>
             <UserWrapper>
-                <StyledUsernameSpan>Created by: </StyledUsernameSpan><StyledButton onClick={handleNavUser}>{content.profileName}</StyledButton>
+                {/* <button onClick={showUsername}>Click</button> */}
+                <StyledUsernameSpan>Created by: </StyledUsernameSpan><StyledButton onClick={handleNavUser}>{content.displayName}</StyledButton>
             </UserWrapper>
             
         </Wrapper>

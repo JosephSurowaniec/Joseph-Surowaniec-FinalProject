@@ -71,6 +71,7 @@ const ProfileEditPage = ({ showModal, setShowModal}) => {
                         await fetch(`/user/editUser`, {
                                 "method": "PATCH",
                                 "body": JSON.stringify({
+                                    "profileName": profileName,
                                     "userId": userId,
                                     "username": changedProfileName,
                                     "profileImage": changedProfileImage

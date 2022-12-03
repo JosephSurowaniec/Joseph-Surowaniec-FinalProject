@@ -5,21 +5,25 @@ import { useAuth0 } from "@auth0/auth0-react";
 import styled from "styled-components";
 import ProfileEditPage from "./ProfileEditPage";
 import {Image} from 'cloudinary-react';
+import { useParams } from "react-router-dom";
 
 const ProfilePage = () => {
 
     const { profileName , userId , profileEmail , profileImage} = useContext(UserContext);
 
-    const [ userData, setUserData] = useState("");
+    let profileId = useParams();
+
+    const [ profileData, setProfileData] = useState("");
     const [userCharacters , setUserCharacters] = useState("");
     const [ showModal , setShowModal ] = useState(false);
     const { user, isAuthenticated } = useAuth0();
 
     useEffect(() => {
-        fetch(`/profile/${userId}`)
+        console.log(profileId.userId);
+
+        fetch(`/profile/${profileId.userId}`)
             .then((res) => res.json())
             .then((data) => {
-                console.log(data);
                 setUserCharacters(data.data);
             })
             .catch((error) => {
@@ -28,11 +32,11 @@ const ProfilePage = () => {
     }, []);
 
     useEffect(() => {
-        fetch(`/user/${user.email}`)
+        fetch(`/user/profile/${profileId.userId}`)
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
-                setUserData(data);
+                setProfileData(data.data[0]);
             })
             .catch((error) => {
                 window.alert("An Error Occured");
@@ -41,28 +45,28 @@ const ProfilePage = () => {
 
     const handleEditProfile = () => {
         console.log("this will open the modal");
-        console.log(userData);
+        console.log(profileData);
         setShowModal(prev => !prev)
     };
     
     return(
         isAuthenticated
-        ?<Wrapper>
+        ?profileData?<Wrapper>
             <Header>
-                <h1>{profileName}'s profile</h1>
+                <h1>{profileData.username}'s profile</h1>
             </Header>
             <UserInfoWrapper>
                 <ProfileEditPage  showModal={showModal} setShowModal={setShowModal} />
                 <ProfileDetails>
                     <ImageWrapper>
-                        {profileImage ?<Image cloudName="dfigamsk5" publicId={profileImage} gravity= "auto" aspect_ratio= "1:1" border= "3px_solid_rgb:7c98b3" radius= "max" width="250" height="250" crop="fill"/>
+                        {profileData.profileImage ?<Image cloudName="dfigamsk5" publicId={profileData.profileImage} gravity= "auto" aspect_ratio= "1:1" border= "3px_solid_rgb:7c98b3" radius= "max" width="250" height="250" crop="fill"/>
                         :<Image cloudName="dfigamsk5" publicId="User_Profile/defaultProfileImage_pl3ci7" gravity= "auto" aspect_ratio= "1:1" border= "3px_solid_rgb:cc444b" radius= "max" width="150" height="150" crop="fill" />}
                     </ImageWrapper>
                         <InfoWrapper>
-                            <StyledInfo><StyledInfoSpan>Username:</StyledInfoSpan>{profileName}</StyledInfo>
-                            <StyledInfo><StyledInfoSpan>Email Address:</StyledInfoSpan>{profileEmail}</StyledInfo> 
+                            <StyledInfo><StyledInfoSpan>Username:</StyledInfoSpan>{profileData.username}</StyledInfo>
+                            <StyledInfo><StyledInfoSpan>Email Address:</StyledInfoSpan>{profileData.email}</StyledInfo> 
                         </InfoWrapper>
-                    <StyledEditButton onClick={handleEditProfile}>Edit Profile</StyledEditButton>
+                    {profileName === profileData.username?<StyledEditButton onClick={handleEditProfile}>Edit Profile</StyledEditButton>:<></>}
                 </ProfileDetails>
             </UserInfoWrapper>
             {!userCharacters?<>Loading</>
@@ -78,6 +82,7 @@ const ProfilePage = () => {
                 
             </div>}
         </Wrapper>
+        :<div>Loading</div>
         :<h1>You must Log In first</h1>
         
     )

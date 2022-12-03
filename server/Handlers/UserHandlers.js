@@ -3,7 +3,7 @@
 const { v4: uuidv4 } = require("uuid");
 
 // CLIENT CONFIGURATION
-const { MongoClient} = require("mongodb")
+const { MongoClient, ObjectId} = require("mongodb")
 require("dotenv").config();
 const { MONGO_URI } = process.env;
 const options = {
@@ -12,9 +12,43 @@ const options = {
   }
 
   const getUser = async (req, res) => {
+
     const client = new MongoClient(MONGO_URI, options)
     
-    const userEmail = req.params.userEmail;
+    try {
+      const userEmail = req.params.userEmail;
+
+      // Connect client
+      await client.connect()
+      console.log("Connected Here trying");
+      console.log("checkpoint 1");
+      const db = client.db("Final_Project_DnD")
+  
+      // insert formatted order to db Orders collection
+      const userData = await db.collection("Users").find({email: `${userEmail}`}).toArray();
+      console.log("checkpoint 2");
+      res.status(200).json({
+        status: 200,
+        message: "User Data found",
+        data: userData
+      })
+    } catch(err) {
+      res.status(400).json({
+        status: 400, 
+        message: "An Error Occured c'mon we got this",
+        data: userData
+      })
+    } finally {
+      // disconnect from database 
+      client.close()
+      console.log("Disconnected")
+    }
+  };
+
+  const getUserById = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options)
+    
+    const userId = req.params.userId;
     
     
     try {
@@ -24,7 +58,7 @@ const options = {
       const db = client.db("Final_Project_DnD")
   
       // insert formatted order to db Orders collection
-      const userData = await db.collection("Users").find({email: `${userEmail}`}).toArray();
+      const userData = await db.collection("Users").find({client_id: `${userId}`}).toArray();
 
       res.status(200).json({
         status: 200,
@@ -43,6 +77,42 @@ const options = {
       console.log("Disconnected")
     }
   };
+
+  const getProfileById = async (req, res) => {
+    const client = new MongoClient(MONGO_URI, options)
+    
+    const userId = req.params.userId;
+
+    const profileID = ObjectId(`${userId}`);
+    
+    
+    try {
+      // Connect client
+      await client.connect()
+      console.log("Connected")
+      const db = client.db("Final_Project_DnD")
+  
+      // insert formatted order to db Orders collection
+      const userData = await db.collection("Users").find({_id: profileID}).toArray();
+
+      res.status(200).json({
+        status: 200,
+        message: "Data found",
+        data: userData
+      })
+    } catch(err) {
+      res.status(400).json({
+        status: 400, 
+        message: "An Error Occured c'mon we got this",
+        data: userData
+      })
+    } finally {
+      // disconnect from database 
+      client.close()
+      console.log("Disconnected")
+    }
+  };
+
 // add new order into database
 const addNewUser = async (req, res) => {
   const client = new MongoClient(MONGO_URI, options)
@@ -160,6 +230,7 @@ const logInAttempt = async (req, res) => {
       const newPost = { _id: uuidv4(),
                         userId: userPost.userId,
                         message: userPost.status,
+                        userDisplayName: userPost.profileName,
                         character: postedCharInfo,
                         feedPage: "Homepage"}
 
@@ -187,12 +258,16 @@ const logInAttempt = async (req, res) => {
 
   const updateUser = async (req, res) => {
     const client = new MongoClient(MONGO_URI, options)
-    
+
     const userIdData = req.body.userId;
     const usernameData = req.body.username;
     const imageData = req.body.profileImage;
+    const profileNameData = req.body.profileName;
 
-    const query = {client_id: `${userIdData}`};
+    const userID = ObjectId(`${userIdData}`);
+    
+
+    const query = {_id: userID};
     const update = { $set: { username: `${usernameData}`}}
 
     const updateImage = { $set: { profileImage: `${imageData}`}}
@@ -201,9 +276,12 @@ const logInAttempt = async (req, res) => {
       // Connect client
       await client.connect()
       console.log("Connected")
+      
       const db = client.db("Final_Project_DnD")
       if (usernameData) {
         const updateUsername = await db.collection("Users").updateOne(query , update);
+
+        const updateDisplayName = await db.collection("Home_Feed").updateMany({userDisplayName: `${profileNameData}`} , { $set: { userDisplayName: `${usernameData}`} });
       }
 
       if (imageData) {
@@ -211,7 +289,8 @@ const logInAttempt = async (req, res) => {
       }
       
       console.log("the update went through")
-      const checkNewData = await db.collection("Users").find({client_id: `${userIdData}`}).toArray();
+
+      const checkNewData = await db.collection("Users").find({_id: userID}).toArray();
 
       checkNewData
       ?res.status(200).json({status: 200, message: "Update Successful", data: checkNewData})
@@ -236,6 +315,8 @@ module.exports = {
     getUser,
     getHomeFeed,
     addNewPostHomeFeed,
-    updateUser
+    updateUser,
+    getUserById,
+    getProfileById
 }
 
