@@ -20,7 +20,7 @@ const Features = (featureInfo) => {
                                     <StyledLevelNumber>{element.level}</StyledLevelNumber>
                                     <StyledLevelDetails>{element.features[0] ?element.features.map((el) => {
                                         return(
-                                            <div key={Math.floor(Math.random() * 1700000000)}><DetailFeatures name={el.name} index={el.index}/></div>
+                                            <Wrapper123 key={Math.floor(Math.random() * 1700000000)}><DetailFeatures name={el.name} index={el.index}/></Wrapper123>
                                         )
                                     }) 
                                     :<div>No New Features</div>}</StyledLevelDetails>
@@ -33,6 +33,11 @@ const Features = (featureInfo) => {
     );
 };
 
+
+const StyledFeaturesWrapper = styled.div`
+display: flex;
+border: 1px solid rgba(35 , 35 , 35 , 0.2);
+`;
 const StyledScroller = styled.div`
 max-height: 60vh;
 padding: 10px;
@@ -45,9 +50,16 @@ border-bottom: 1px solid #7c98b3;
 margin: 10px;
 `;
 const StyledLevelDetails = styled.div`
+display: flex;
+flex-direction: column;
 padding: 25px;
 background-color: #e5e5e5;
-border: none;
+border: 1px solid rgba(35 , 35 , 35 , 0.2);
 border-radius: 15px;
+`;
+
+const Wrapper123 = styled.div`
+padding: 15px;
+
 `;
 export default Features;

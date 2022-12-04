@@ -23,7 +23,7 @@ const CharacterLevels = (features) => {
             <LevelSelectorForm>
                 <form>
                     <StyledLabel>Select your Level</StyledLabel>
-                    <select value={currentLevel} onChange={(e) => {setCurrentLevel(e.target.value)
+                    <select value={state.level} onChange={(e) => {setCurrentLevel(e.target.value)
                                                                     actions.updateLevel(e.target.value)}}>
                         {levelInfo.map((element) => {
                         return (

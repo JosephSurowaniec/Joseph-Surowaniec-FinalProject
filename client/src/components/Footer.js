@@ -35,7 +35,7 @@ const Footer = () => {
   return (
     <Wrapper>
       <UpperWrapper>
-        <HomepageButton onClick={handleMainpageNavigate}> Go to the MainPage</HomepageButton>
+        <HomepageButton onClick={handleMainpageNavigate}>MainPage</HomepageButton>
         <h1>This is the Footer object</h1>
         
       </UpperWrapper>

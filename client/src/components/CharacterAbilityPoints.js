@@ -7,12 +7,12 @@ const CharacterAbilityPoints = () => {
 
     const { characterClasses, characterRaces, state  } = useContext ( CharacterContext );
     const {actions} = useContext(CharacterContext);
-    const [ strPoints, setStrPoints] = useState(0);
-    const [ dexPoints, setDexPoints] = useState(0);
-    const [ conPoints, setConPoints] = useState(0);
-    const [ intPoints, setIntPoints] = useState(0);
-    const [ wisPoints, setWisPoints] = useState(0);
-    const [ chaPoints, setChaPoints] = useState(0);
+    // const [ strPoints, setStrPoints] = useState(0);
+    // const [ dexPoints, setDexPoints] = useState(0);
+    // const [ conPoints, setConPoints] = useState(0);
+    // const [ intPoints, setIntPoints] = useState(0);
+    // const [ wisPoints, setWisPoints] = useState(0);
+    // const [ chaPoints, setChaPoints] = useState(0);
 
     const [strModifier, setStrModifier] = useState(0);
     const [dexModifier, setDexModifier] = useState(0);
@@ -95,16 +95,17 @@ const CharacterAbilityPoints = () => {
         console.log("stats sent")
         actions.updateModifiedStats({str: updatedStr, dex: updatedDex , con: updatedCon , int: updatedInt , wis: updatedWis, cha: updatedCha })
     };
-    // const checkNums = () => {
-    //     console.log(strModifier);
-    //     console.log(dexModifier);
-    //     console.log(conModifier);
-    //     console.log(intModifier);
-    //     console.log(wisModifier);
-    //     console.log(chaModifier);
-    // }
+    const checkNums = () => {
+        console.log(state);
+        // console.log(strModifier);
+        // console.log(dexModifier);
+        // console.log(conModifier);
+        // console.log(intModifier);
+        // console.log(wisModifier);
+        // console.log(chaModifier);
+    }
 
-    const pointsLeft = 27 - strPoints - dexPoints - conPoints - intPoints - wisPoints - chaPoints;
+    const pointsLeft = 27 - state.assignedPoints.strength - state.assignedPoints.dexterity - state.assignedPoints.constitution - state.assignedPoints.intelligence - state.assignedPoints.wisdom - state.assignedPoints.charisma;
 
     const ModifierValues = {
         4: "-3", 5: "-3", 6: "-2", 7: "-2", 8: "-1", 9: "-1", 10: "0", 11: "0", 12: "+1", 13: "+1", 14: "+2", 15: "+2", 16: "+3", 17: "+3", 18: "+4", 19: "+4", 20: "+5"
@@ -113,94 +114,94 @@ const CharacterAbilityPoints = () => {
     return (
         <Wrapper>
             <PointsWrapper> Points Remaining: {pointsLeft} </PointsWrapper>
-            {/* <button onClick={checkNums}></button> */}
+            <button onClick={checkNums}></button>
             <FormWrapper>
                                 <StatsWrapper><label>STRENGTH</label>
                                     <select value={state.abilityScores.strength} onChange={(e) => {actions.updateStr(e.target.value)
-                                                                                                    setStrPoints(pointValues[e.target.value])} }>
+                                                                                                    actions.updateStrPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
-                                        {pointsLeft <= 0 && strPoints <=0 ?<></>:<option value={9}>9</option>}
-                                        {pointsLeft <= 1 && strPoints <=1 ?<></>:<option value={10}>10</option>}
-                                        {pointsLeft <= 2 && strPoints <=2 ?<></>:<option value={11}>11</option>}
-                                        {pointsLeft <= 3 && strPoints <=3 ?<></>:<option value={12}>12</option>}
-                                        {pointsLeft <= 4 && strPoints <=4 ?<></>:<option value={13}>13</option>}
-                                        {pointsLeft <= 6 && strPoints <=6 ?<></>:<option value={14}>14</option>}
-                                        {pointsLeft <= 8 && strPoints <=8 ?<></>:<option value={15}>15</option>}
+                                        {pointsLeft <= 0 && state.assignedPoints.strength <=0 ?<></>:<option value={9}>9</option>}
+                                        {pointsLeft <= 1 && state.assignedPoints.strength <=1 ?<></>:<option value={10}>10</option>}
+                                        {pointsLeft <= 2 && state.assignedPoints.strength <=2 ?<></>:<option value={11}>11</option>}
+                                        {pointsLeft <= 3 && state.assignedPoints.strength <=3 ?<></>:<option value={12}>12</option>}
+                                        {pointsLeft <= 4 && state.assignedPoints.strength <=4 ?<></>:<option value={13}>13</option>}
+                                        {pointsLeft <= 6 && state.assignedPoints.strength <=6 ?<></>:<option value={14}>14</option>}
+                                        {pointsLeft <= 8 && state.assignedPoints.strength <=8 ?<></>:<option value={15}>15</option>}
                                     </select>
                                     <StatBox>Strength <div>{updatedStr}</div><ModifierWrapper>{ModifierValues[updatedStr]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
                                     <label>DEXTERITY</label>
                                     <select value={state.abilityScores.dexterity} onChange={(e) => {actions.updateDex(e.target.value)
-                                                                                                    setDexPoints(pointValues[e.target.value])} }>
+                                                                                                    actions.updateDexPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
-                                        {pointsLeft <= 0 && dexPoints <=0 ?<></>:<option value={9}>9</option>}
-                                        {pointsLeft <= 1 && dexPoints <=1 ?<></>:<option value={10}>10</option>}
-                                        {pointsLeft <= 2 && dexPoints <=2 ?<></>:<option value={11}>11</option>}
-                                        {pointsLeft <= 3 && dexPoints <=3 ?<></>:<option value={12}>12</option>}
-                                        {pointsLeft <= 4 && dexPoints <=4 ?<></>:<option value={13}>13</option>}
-                                        {pointsLeft <= 6 && dexPoints <=6 ?<></>:<option value={14}>14</option>}
-                                        {pointsLeft <= 8 && dexPoints <=8 ?<></>:<option value={15}>15</option>}
+                                        {pointsLeft <= 0 && state.assignedPoints.dexterity <=0 ?<></>:<option value={9}>9</option>}
+                                        {pointsLeft <= 1 && state.assignedPoints.dexterity <=1 ?<></>:<option value={10}>10</option>}
+                                        {pointsLeft <= 2 && state.assignedPoints.dexterity <=2 ?<></>:<option value={11}>11</option>}
+                                        {pointsLeft <= 3 && state.assignedPoints.dexterity <=3 ?<></>:<option value={12}>12</option>}
+                                        {pointsLeft <= 4 && state.assignedPoints.dexterity <=4 ?<></>:<option value={13}>13</option>}
+                                        {pointsLeft <= 6 && state.assignedPoints.dexterity <=6 ?<></>:<option value={14}>14</option>}
+                                        {pointsLeft <= 8 && state.assignedPoints.dexterity <=8 ?<></>:<option value={15}>15</option>}
                                     </select>
                                     <StatBox>Dex <div>{updatedDex}</div><ModifierWrapper>{ModifierValues[updatedDex]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
                                     <label>CONSTITUTION</label>
                                     <select value={state.abilityScores.constitution} onChange={(e) => {actions.updateCon(e.target.value)
-                                                                                                    setConPoints(pointValues[e.target.value])} }>
+                                                                                                    actions.updateConPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
-                                        {pointsLeft <= 0 && conPoints <=0 ?<></>:<option value={9}>9</option>}
-                                        {pointsLeft <= 1 && conPoints <=1 ?<></>:<option value={10}>10</option>}
-                                        {pointsLeft <= 2 && conPoints <=2 ?<></>:<option value={11}>11</option>}
-                                        {pointsLeft <= 3 && conPoints <=3 ?<></>:<option value={12}>12</option>}
-                                        {pointsLeft <= 4 && conPoints <=4 ?<></>:<option value={13}>13</option>}
-                                        {pointsLeft <= 6 && conPoints <=6 ?<></>:<option value={14}>14</option>}
-                                        {pointsLeft <= 8 && conPoints <=8 ?<></>:<option value={15}>15</option>}
+                                        {pointsLeft <= 0 && state.assignedPoints.constitution <=0 ?<></>:<option value={9}>9</option>}
+                                        {pointsLeft <= 1 && state.assignedPoints.constitution <=1 ?<></>:<option value={10}>10</option>}
+                                        {pointsLeft <= 2 && state.assignedPoints.constitution <=2 ?<></>:<option value={11}>11</option>}
+                                        {pointsLeft <= 3 && state.assignedPoints.constitution <=3 ?<></>:<option value={12}>12</option>}
+                                        {pointsLeft <= 4 && state.assignedPoints.constitution <=4 ?<></>:<option value={13}>13</option>}
+                                        {pointsLeft <= 6 && state.assignedPoints.constitution <=6 ?<></>:<option value={14}>14</option>}
+                                        {pointsLeft <= 8 && state.assignedPoints.constitution <=8 ?<></>:<option value={15}>15</option>}
                                     </select>
                                     <StatBox>Con <div>{updatedCon}</div><ModifierWrapper>{ModifierValues[updatedCon]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
                                     <label>INTELLIGENCE</label>
                                     <select value={state.abilityScores.intelligence} onChange={(e) => {actions.updateInt(e.target.value)
-                                                                                                    setIntPoints(pointValues[e.target.value])} }>
+                                                                                                    actions.updateIntPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
-                                        {pointsLeft <= 0 && intPoints <=0 ?<></>:<option value={9}>9</option>}
-                                        {pointsLeft <= 1 && intPoints <=1 ?<></>:<option value={10}>10</option>}
-                                        {pointsLeft <= 2 && intPoints <=2 ?<></>:<option value={11}>11</option>}
-                                        {pointsLeft <= 3 && intPoints <=3 ?<></>:<option value={12}>12</option>}
-                                        {pointsLeft <= 4 && intPoints <=4 ?<></>:<option value={13}>13</option>}
-                                        {pointsLeft <= 6 && intPoints <=6 ?<></>:<option value={14}>14</option>}
-                                        {pointsLeft <= 8 && intPoints <=8 ?<></>:<option value={15}>15</option>}
+                                        {pointsLeft <= 0 && state.assignedPoints.intelligence <=0 ?<></>:<option value={9}>9</option>}
+                                        {pointsLeft <= 1 && state.assignedPoints.intelligence <=1 ?<></>:<option value={10}>10</option>}
+                                        {pointsLeft <= 2 && state.assignedPoints.intelligence <=2 ?<></>:<option value={11}>11</option>}
+                                        {pointsLeft <= 3 && state.assignedPoints.intelligence <=3 ?<></>:<option value={12}>12</option>}
+                                        {pointsLeft <= 4 && state.assignedPoints.intelligence <=4 ?<></>:<option value={13}>13</option>}
+                                        {pointsLeft <= 6 && state.assignedPoints.intelligence <=6 ?<></>:<option value={14}>14</option>}
+                                        {pointsLeft <= 8 && state.assignedPoints.intelligence <=8 ?<></>:<option value={15}>15</option>}
                                     </select>
                                     <StatBox>Int <div>{updatedInt}</div><ModifierWrapper>{ModifierValues[updatedInt]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
                                     <label>WISDOM</label>
                                     <select value={state.abilityScores.wisdom} onChange={(e) => {actions.updateWis(e.target.value)
-                                                                                                    setWisPoints(pointValues[e.target.value])} }>
+                                                                                                    actions.updateWisPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
-                                        {pointsLeft <= 0 && wisPoints <=0 ?<></>:<option value={9}>9</option>}
-                                        {pointsLeft <= 1 && wisPoints <=1 ?<></>:<option value={10}>10</option>}
-                                        {pointsLeft <= 2 && wisPoints <=2 ?<></>:<option value={11}>11</option>}
-                                        {pointsLeft <= 3 && wisPoints <=3 ?<></>:<option value={12}>12</option>}
-                                        {pointsLeft <= 4 && wisPoints <=4 ?<></>:<option value={13}>13</option>}
-                                        {pointsLeft <= 6 && wisPoints <=6 ?<></>:<option value={14}>14</option>}
-                                        {pointsLeft <= 8 && wisPoints <=8 ?<></>:<option value={15}>15</option>}
+                                        {pointsLeft <= 0 && state.assignedPoints.wisdom <=0 ?<></>:<option value={9}>9</option>}
+                                        {pointsLeft <= 1 && state.assignedPoints.wisdom <=1 ?<></>:<option value={10}>10</option>}
+                                        {pointsLeft <= 2 && state.assignedPoints.wisdom <=2 ?<></>:<option value={11}>11</option>}
+                                        {pointsLeft <= 3 && state.assignedPoints.wisdom <=3 ?<></>:<option value={12}>12</option>}
+                                        {pointsLeft <= 4 && state.assignedPoints.wisdom <=4 ?<></>:<option value={13}>13</option>}
+                                        {pointsLeft <= 6 && state.assignedPoints.wisdom <=6 ?<></>:<option value={14}>14</option>}
+                                        {pointsLeft <= 8 && state.assignedPoints.wisdom <=8 ?<></>:<option value={15}>15</option>}
                                     </select>
                                     <StatBox>Wisdom <div>{updatedWis}</div><ModifierWrapper>{ModifierValues[updatedWis]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
                                     <label>CHARISMA</label>
                                     <select value={state.abilityScores.charisma} onChange={(e) => {actions.updateCha(e.target.value)
-                                                                                                    setChaPoints(pointValues[e.target.value])} }>
+                                                                                                    actions.updateChaPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
-                                        {pointsLeft <= 0 && chaPoints <=0 ?<></>:<option value={9}>9</option>}
-                                        {pointsLeft <= 1 && chaPoints <=1 ?<></>:<option value={10}>10</option>}
-                                        {pointsLeft <= 2 && chaPoints <=2 ?<></>:<option value={11}>11</option>}
-                                        {pointsLeft <= 3 && chaPoints <=3 ?<></>:<option value={12}>12</option>}
-                                        {pointsLeft <= 4 && chaPoints <=4 ?<></>:<option value={13}>13</option>}
-                                        {pointsLeft <= 6 && chaPoints <=6 ?<></>:<option value={14}>14</option>}
-                                        {pointsLeft <= 8 && chaPoints <=8 ?<></>:<option value={15}>15</option>}
+                                        {pointsLeft <= 0 && state.assignedPoints.charisma <=0 ?<></>:<option value={9}>9</option>}
+                                        {pointsLeft <= 1 && state.assignedPoints.charisma <=1 ?<></>:<option value={10}>10</option>}
+                                        {pointsLeft <= 2 && state.assignedPoints.charisma <=2 ?<></>:<option value={11}>11</option>}
+                                        {pointsLeft <= 3 && state.assignedPoints.charisma <=3 ?<></>:<option value={12}>12</option>}
+                                        {pointsLeft <= 4 && state.assignedPoints.charisma <=4 ?<></>:<option value={13}>13</option>}
+                                        {pointsLeft <= 6 && state.assignedPoints.charisma <=6 ?<></>:<option value={14}>14</option>}
+                                        {pointsLeft <= 8 && state.assignedPoints.charisma <=8 ?<></>:<option value={15}>15</option>}
                                     </select>
                                     <StatBox>Charisma <div>{updatedCha}</div><ModifierWrapper>{ModifierValues[updatedCha]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
