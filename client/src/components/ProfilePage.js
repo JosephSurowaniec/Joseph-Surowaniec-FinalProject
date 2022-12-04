@@ -81,15 +81,18 @@ const ProfilePage = () => {
                 })}
                 
             </div>}
+
         </Wrapper>
-        :<div>Loading</div>
-        :<h1>You must Log In first</h1>
+        :<Wrapper>Loading</Wrapper>
+        :<Wrapper>You must Log In first</Wrapper>
         
     )
 };
 
 const Wrapper = styled.div`
 padding: 25px;
+height: 100vh;
+
 `
 const Header = styled.div`
 border-bottom: 10px solid #accbe1;

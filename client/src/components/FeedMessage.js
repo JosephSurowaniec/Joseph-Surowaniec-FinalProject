@@ -60,6 +60,7 @@ const Wrapper = styled.div`
 box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.52);
 border-radius: 15px;
 padding: 15px;
+background-color: white;
 `;
 const CharacterWrapper = styled.div`
 display: flex;

@@ -3,7 +3,16 @@ const helmet = require("helmet");
 const morgan = require('morgan');
 
 const { addNewUser, logInAttempt , getUser , getHomeFeed , addNewPostHomeFeed , updateUser , getUserById , getProfileById } = require('./Handlers/UserHandlers');
-const { addNewCharacter, getCharactersByUsers , getCharacter , addNewCharacterPost , getCharacterFeed , getProgressFeed, addProgressPost, uploadImageToCloud , uploadUserImageToCloud } = require('./Handlers/CharacterHandlers');
+const { addNewCharacter,
+        getCharactersByUsers,
+        getCharacter, 
+        addNewCharacterPost, 
+        getCharacterFeed, 
+        getProgressFeed, 
+        addProgressPost, 
+        uploadImageToCloud, 
+        uploadUserImageToCloud,
+        editCharacter } = require('./Handlers/CharacterHandlers');
 const port = 8000;
 
 
@@ -17,6 +26,8 @@ express()
     .use('/', express.static(__dirname + '/'))
 
     .post("/newcharacters", addNewCharacter)
+    .patch("/editcharacter/:characterId", editCharacter)
+
     .post("/newUser", addNewUser)
     .post("/user",  logInAttempt)
     .get("/profile/:userId", getCharactersByUsers )

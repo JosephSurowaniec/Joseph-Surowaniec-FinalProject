@@ -28,10 +28,10 @@ const DetailFeatures = (specificFeatures) => {
     return(
         <div>
             <div>
-                <button onClick={handleShowDetails}>{specificFeatures.name}</button>
+                <StyledFeatureButton onClick={handleShowDetails}>{specificFeatures.name}</StyledFeatureButton>
             </div>
             {hideDetails ?
-                <div>
+                <FeatureDetails>
                     {details.desc.map((element) => {
                         return (
                             <div key={Math.floor(Math.random() * 1700000000)}>
@@ -39,14 +39,22 @@ const DetailFeatures = (specificFeatures) => {
                             </div>
                         )
                     })}
-                </div>
+                </FeatureDetails>
                 :<></>}
         </div>
         
     );
 };
 
-const Wrapper = styled.div`
+const FeatureDetails = styled.div`
+padding: 5px;
+background: white;
+border-radius: 15px;
 `;
-
+const StyledFeatureButton = styled.div`
+border: none;
+background: #7c98b3;
+padding: 10px;
+border-radius: 15px;
+`;
 export default DetailFeatures;

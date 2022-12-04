@@ -11,10 +11,9 @@ import { UserContext } from "./UserContext";
 import { useAuth0 } from "@auth0/auth0-react";
 import CharacterLevels from "./CharacterLevels";
 import {Image} from 'cloudinary-react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-
-const Character = () => {
+const EditCharacter = () => {
 
     const { characterClasses, characterRaces, state  } = useContext ( CharacterContext );
     const {actions} = useContext(CharacterContext);
@@ -23,9 +22,53 @@ const Character = () => {
     const { isAuthenticated } = useAuth0();
     const navigate = useNavigate();
 
+    const {characterId} = useParams();
+    const [currentCharacter, setCurrentCharacter] = useState("");
+    const [visibleNavButton, setVisibleNavButton] = useState(false);
+
     useEffect(() => {
         actions.resetCharacterData("");
+
+        if (characterId) {
+
+            fetch(`/character/${characterId}`)
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data);
+                setCurrentCharacter(data.data[0].characterInformation);
+                console.log(state.characterName);
+            })
+            .catch((error) => {
+                window.alert(error);
+            });
+        }
+        
     }, []);
+
+    useEffect(() => {
+
+        actions.getCharacterData(currentCharacter);
+        if (currentCharacter.abilityScores) {
+            actions.updateStr(currentCharacter.abilityScores.strength);
+            actions.updateDex(currentCharacter.abilityScores.dexterity);
+            actions.updateCon(currentCharacter.abilityScores.constitution);
+            actions.updateInt(currentCharacter.abilityScores.intelligence);
+            actions.updateWis(currentCharacter.abilityScores.wisdom);
+            actions.updateCha(currentCharacter.abilityScores.charisma);
+        }
+        if (currentCharacter.assignedPoints) {
+            actions.updateStrPoints(currentCharacter.assignedPoints.strength);
+            actions.updateDexPoints(currentCharacter.assignedPoints.dexterity);
+            actions.updateConPoints(currentCharacter.assignedPoints.constitution);
+            actions.updateIntPoints(currentCharacter.assignedPoints.intelligence);
+            actions.updateWisPoints(currentCharacter.assignedPoints.wisdom);
+            actions.updateChaPoints(currentCharacter.assignedPoints.charisma);
+        }
+        
+        
+        
+    }, [currentCharacter])
+    
     
     const handleShowSection = (section) => {
         setCurrentlyDisplayed(section);
@@ -35,23 +78,25 @@ const Character = () => {
         actions.updateClass("");
         actions.updateClassDetails("");
     };
-    const showRace = () => {
-        console.log(state.selectedRace)
+    const showState = () => {
+        console.log(state)
     };
 
     const handleResetRace = () => {
         actions.updateRace("")
     };
 
-    const testAPI = () => {
-        console.log("we are here");
-        console.log( state );
-        
-    };
+    const handleCharProfileNav = () => {
+        navigate(`/character/${characterId}`);
+        actions.resetCharacterData("");
+    }
 
-    const submitCharacter = () => {
-            fetch("/newcharacters", {
-                "method": "POST",
+    const submitCharacter = () => { //need to change to a patch
+        console.log(currentCharacter);
+        console.log( state );
+
+            fetch(`/editcharacter/${characterId}`, {
+                "method": "PATCH",
                 "body": JSON.stringify({
                     "characterDetails": state,
                     "userId": userId
@@ -63,14 +108,14 @@ const Character = () => {
             .then( res => res.json() )
             .then( data => {
                 console.log(data);
-                navigate(`/character/${data.data._id}`);
-                actions.resetCharacterData("");
+                setVisibleNavButton(true);
+                
             } )
     };
 
     return (
-        isAuthenticated
-        ?
+        isAuthenticated 
+        ?state.characterName?
         <Wrapper>
             <CreatorWrapper>
                 <DisplayName>
@@ -78,7 +123,8 @@ const Character = () => {
                         Character Name: {state.characterName}
                     </div>
                     <div>
-                        <button onClick={submitCharacter}>Submit Your Character</button>
+                        <button onClick={submitCharacter}>Confirm Changes</button>
+                        {visibleNavButton?<button onClick={handleCharProfileNav}>Back to {state.characterName}'s profile</button>:<></>}
                     </div>
                 </DisplayName>
                 <CharacterImage>
@@ -138,9 +184,15 @@ const Character = () => {
             </StyledContentArea>
             
         </Wrapper>
+        :<>Loading <button onClick={showState}>Click</button></>
         :<h1>You are not logged in</h1>
     )
 };
+
+
+
+
+
 
 const Wrapper = styled.div`
 display: flex;
@@ -238,4 +290,5 @@ const StyledContentArea = styled.div`
 display: flex;
 margin-top: 10%;
 `;
-export default Character;
+
+export default EditCharacter;

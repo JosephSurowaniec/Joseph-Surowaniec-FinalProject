@@ -288,6 +288,73 @@ const uploadUserImageToCloud = async (req, res) => {
   }
 };
 
+const editCharacter = async (req, res) => {
+  const client = new MongoClient(MONGO_URI, options)
+
+  const updatedCharacterData = req.body.characterDetails;
+  
+  const getCharacterId = req.params.characterId;
+
+
+  const query = {_id: getCharacterId };
+  const updateName = { $set: { "characterInformation.characterName" : `${updatedCharacterData.characterName}`}};
+  const updateImage = { $set: { "characterInformation.characterImageId" : `${updatedCharacterData.characterImageId}`}};
+  const updateClass = { $set: { "characterInformation.selectedClass" : updatedCharacterData.selectedClass } };
+  const updateRace = { $set: { "characterInformation.selectedRace" : updatedCharacterData.selectedRace }};
+  const updateClassData= { $set: { "characterInformation.classData" : updatedCharacterData.classData }};
+  const updateLevel = { $set: { "characterInformation.level" : `${updatedCharacterData.level}`}};
+  const updateAbilityScores = { $set: { "characterInformation.abilityScores" : updatedCharacterData.abilityScores } };
+  const updateModifiedAbilityScores = { $set: { "characterInformation.modifiedAbilityScores" : updatedCharacterData.modifiedAbilityScores }};
+  const updateAssignedPoints = { $set: { "characterInformation.assignedPoints" : updatedCharacterData.assignedPoints } };
+  // const updateAll = { $set: { characterInformation : `${updatedCharacterData.characterName}`}};
+
+
+  try {
+    // Connect client
+    await client.connect()
+    console.log("Connected")
+    
+    const db = client.db("Final_Project_DnD")
+    // if (usernameData) {
+      await db.collection("User-Characters").updateOne(query , updateName);
+      await db.collection("User-Characters").updateOne(query , updateImage);
+      await db.collection("User-Characters").updateOne(query , updateClass);
+      await db.collection("User-Characters").updateOne(query , updateRace);
+      await db.collection("User-Characters").updateOne(query , updateClassData);
+      await db.collection("User-Characters").updateOne(query , updateLevel);
+      await db.collection("User-Characters").updateOne(query , updateAbilityScores);
+      await db.collection("User-Characters").updateOne(query , updateModifiedAbilityScores);
+      await db.collection("User-Characters").updateOne(query , updateAssignedPoints);
+
+      // await db.collection("User-Characters").updateOne(query , updateName);
+
+    //   const updateDisplayName = await db.collection("Home_Feed").updateMany({userDisplayName: `${profileNameData}`} , { $set: { userDisplayName: `${usernameData}`} });
+    // }
+
+    // if (imageData) {
+    //   const updateUserImage = await db.collection("Users").updateOne(query , updateImage);
+    // }
+    
+    console.log("the update went through")
+
+    const checkNewData = await db.collection("User-Characters").find({_id: getCharacterId}).toArray();
+
+    checkNewData
+    ?res.status(200).json({status: 200, message: "Update Successful", data: checkNewData , character: updatedCharacterData})
+    :res.status(400).json({status: 400, message: "Bad Attempt"})
+    
+  } catch(err) {
+    res.status(400).json({
+      status: 400, 
+      message: "An Error Occured c'mon we got this",
+    })
+  } finally {
+    // disconnect from database 
+    client.close()
+    console.log("Disconnected")
+  }
+};
+
 module.exports = {
   addNewCharacter,
   getCharactersByUsers,
@@ -297,5 +364,6 @@ module.exports = {
   addProgressPost,
   getProgressFeed,
   uploadImageToCloud,
-  uploadUserImageToCloud
+  uploadUserImageToCloud,
+  editCharacter
 }

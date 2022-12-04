@@ -39,8 +39,8 @@ const Header = () => {
   return (
     <Wrapper>
       <UpperWrapper>
-        <HomepageButton onClick={handleMainpageNavigate}> Go to the MainPage</HomepageButton>
-        <h1>This is the Header object</h1>
+        <HomepageButton onClick={handleMainpageNavigate}>Homepage</HomepageButton>
+        <Title>Roll Low for Initiative Inc</Title>
         <LoginButton />
         <LogoutButton />
         
@@ -55,7 +55,7 @@ const Header = () => {
       {isAuthenticated?
         <LowerWrapper>
           <PlayerButton onClick={handlePlayerNavigate}> Create a Character</PlayerButton>
-          <PlayerButton onClick={handleProfileNavigate}> Go to the Profile Page</PlayerButton>
+          <PlayerButton onClick={handleProfileNavigate}> {profileName}'s Profile</PlayerButton>
         </LowerWrapper>
       :<></>}
     </Wrapper>
@@ -75,7 +75,9 @@ const UpperWrapper = styled.div`
   background-color: #595959;
   color: white;
 `;
-
+const Title = styled.h1`
+margin: auto 15px auto 15px;
+`;
 const LowerWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -97,7 +99,8 @@ const HomepageButton = styled.button`
 border-radius: 15px;
 border: none;
 padding: 15px;
-margin: 15px;
+margin: 15px 0px 15px 15px;
+background: #e5e5e5;
 `;
 
 export default Header;

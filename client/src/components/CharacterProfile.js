@@ -14,6 +14,7 @@ const CharacterProfile = () => {
     const { profileName , loggedIn, userId} = useContext(UserContext);
     const {characterId} = useParams();
     const [specificCharacterInfo, setSpecificCharacterInfo] = useState("");
+    const [userCharacter, setUserCharacter] = useState("");
     const [formData, setFormData] = useState("");
     const [progressionData, setProgressionData] = useState("");
     const [characterFeed, setCharacterFeed ] = useState("");
@@ -35,7 +36,8 @@ const CharacterProfile = () => {
             .then((res) => res.json())
             .then((data) => {
                 console.log(data);
-                setSpecificCharacterInfo(data.data[0].characterInformation)
+                setSpecificCharacterInfo(data.data[0].characterInformation);
+                setUserCharacter(data.data[0].userId)
             })
             .catch((error) => {
                 window.alert(error);
@@ -155,7 +157,9 @@ const CharacterProfile = () => {
       };
 
       const testProgressfeed = () => {
-        console.log(progressFeed);
+        console.log(profileName);
+        console.log(userId);
+        console.log(userCharacter);
       };
 
       const setSection = (section) => {
@@ -172,8 +176,8 @@ const CharacterProfile = () => {
             :
             <InnerWrapper>
                 <ImageWrapper>
-                    {specificCharacterInfo.characterImageId ?<Image cloudName="dfigamsk5" publicId={specificCharacterInfo.characterImageId} style={{height:300}}/>
-                    :<Image cloudName="dfigamsk5" publicId="Testing_Setup/unknownadventurer_fuanqy" />}
+                    {specificCharacterInfo.characterImageId ?<StyledImage cloudName="dfigamsk5" publicId={specificCharacterInfo.characterImageId} />
+                    :<StyledImage cloudName="dfigamsk5" publicId="Testing_Setup/unknownadventurer_fuanqy" />}
                 </ImageWrapper>
             <ScrollWrapper>
                 <Banner>
@@ -202,8 +206,8 @@ const CharacterProfile = () => {
                                 Race: {specificCharacterInfo.selectedRace.name}
                             </TextDisplay>
                             <StatsWrapper>
-                                Stats Location
-                                <button onClick={showInfo}></button>
+                                {/* Stats Location
+                                <button onClick={showInfo}></button> */}
                                 <StatBox>Strength <div>{specificCharacterInfo.modifiedAbilityScores.strength}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.strength]}</ModifierWrapper></StatBox>
                                 <StatBox>Dex <div>{specificCharacterInfo.modifiedAbilityScores.dexterity}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.dexterity]}</ModifierWrapper></StatBox>
                                 <StatBox>Con <div>{specificCharacterInfo.modifiedAbilityScores.constitution}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.constitution]}</ModifierWrapper></StatBox>
@@ -240,11 +244,9 @@ const CharacterProfile = () => {
                         </CharacterInfoWrapper>
                         :<></>}
                         {currentSection === "Progress" ?
-                        <div>
-                            {/* <Achievement /> */}
-                            Progress Tab
                             <StyledCommentSection>
-                            <Textbox>
+                            {userId === userCharacter?<Textbox>
+                                {/* <button onClick={testProgressfeed}>Click to see names</button> */}
                                     <MiniHeader>Progression Chat</MiniHeader>
                                 
                                     <StyledForm onSubmit={handleSubmitProgression}>
@@ -258,12 +260,11 @@ const CharacterProfile = () => {
                                         <StyledSubmit type="submit" disabled={progressionData.length > 100}>Submit</StyledSubmit>
                                     </InputArea>
                                     </StyledForm>
-                                    
-                                    
                                 </Textbox>
+                                :<></>}
 
                                 <PersonalCommentSection>
-                                    <button onClick={testProgressfeed}></button>
+                                    {/* <button onClick={testProgressfeed}></button> */}
                                     {!progressFeed[0]
                                     ?<div>Loading</div>
                                     :
@@ -283,7 +284,7 @@ const CharacterProfile = () => {
                                 }
                                 </PersonalCommentSection>
                             </StyledCommentSection>
-                        </div>
+
                         :<></>}
                         {currentSection === "Comment" ?
                             <StyledCommentSection>
@@ -306,7 +307,7 @@ const CharacterProfile = () => {
                                 </Textbox>
 
                                 <PersonalCommentSection>
-                                    <button onClick={testHomefeed}></button>
+                                    {/* <button onClick={testHomefeed}></button> */}
                                     {!characterFeed[0]
                                     ?<div>Loading</div>
                                     :
@@ -340,14 +341,21 @@ const CharacterProfile = () => {
 
 const Wrapper = styled.div`
 border: 1px solid black;
+padding: 50px;
 margin: 25px;
-height: 90vh;
+height: 78vh;
 `;
 const InnerWrapper = styled.div`
 
 margin: 25px;
 display: flex;
 height: 65%;
+
+`;
+
+const StyledImage = styled(Image)`
+border-radius: 15px;
+max-width: 400px;
 `;
 const PersonalCommentSection = styled.div`
 padding: 25px;
@@ -364,6 +372,7 @@ flex: 1;
 `;
 const LevelSpan = styled.span`
 font-size: 15px;
+margin-right: 15px;
 `;
 const ContentWrapper = styled.div`
 display: flex;
@@ -375,25 +384,30 @@ flex: 1;
 `;
 const ChangedContent = styled.div`
 height: 100%;
+background-color: #e5e5e5;
+padding-left: 25px;
 `;
 const Banner = styled.div`
 display: flex;
 background-color: black;
 color: white;
-height: 7%;
+height: 55px;
 `;
 const StyledChangeButton = styled.button`
 padding: 15px;
 background-color: grey;
 color: white;
 flex: 1;
+height: 55px;
 `;
 
 const StyledSubSectionButton = styled.button`
 padding: 15px;
 background-color: black;
-color: red;
-
+color: #accbe1;
+font-size: 20px;
+font-weight: bold;
+border-bottom: 2px solid #cc444b;
 `;
 const SubSectionWrapper = styled.div`
 display: flex;
@@ -422,9 +436,8 @@ width: 75%;
 
 
 const TextWrapper = styled.div`
-
 padding: 25px;
-width: 350px;
+width: 450px;
 `;
 
 const StatsWrapper = styled.div`

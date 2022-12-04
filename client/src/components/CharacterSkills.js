@@ -26,8 +26,7 @@ const CharacterSkills = (characterDetails) => {
 
     return (
         <Wrapper>
-            <button onClick={seeSkills}>Click</button>
-            
+            {/* <button onClick={seeSkills}>Click</button> */}
             <SkillSection>
                 <h1>Skills</h1>
                 <UniqueSkill>Acrobatics <ModifierSpan>{statModifiers[statistics.dexterity]}</ModifierSpan></UniqueSkill>
@@ -68,6 +67,8 @@ const CharacterSkills = (characterDetails) => {
 const Wrapper = styled.div`
 
 display: flex;
+align-items: center;
+justify-content: center;
 border: 1px solid black;
 flex: 1;
 height: 100%;
@@ -101,7 +102,14 @@ border: 2px solid red;
 border-radius: 5px;
 `;
 const SavingThrowWrapper = styled.div`
-margin-left: 25px;
+display: flex;
+flex-direction: column;
+
+border-radius: 15px;
+margin: 25px;
+background-color: white;
+padding: 25px;
+max-height: 50%;
 `;
 const StyledSavingThrow = styled.div`
 
@@ -109,8 +117,10 @@ display: flex;
 flex-wrap: wrap;
 height: 35%;
 max-width: 400px;
+min-width: 350px;
 `;
 const StatBox = styled.div`
+margin: 0 auto;
 width: 100px;
 height: 100px;
 margin-top: 15px;

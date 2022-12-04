@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Character from "./components/Character";
 import CharacterProfile from "./components/CharacterProfile";
+import EditCharacter from "./components/EditCharacter";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 
@@ -20,8 +21,9 @@ const App = () => {
         <Route path="/createAccount" element={<SigninPage />} />
         <Route path="/profile/:userId" element={<ProfilePage />} />
         <Route path="/character/:characterId" element={<CharacterProfile />} />
+        <Route path="/character/edit/:characterId" element={<EditCharacter />} />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </BrowserRouter>
   );
 }

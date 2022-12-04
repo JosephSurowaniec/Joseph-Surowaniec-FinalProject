@@ -99,16 +99,16 @@ const MainPage = () => {
 
     return(
             <Wrapper>
-                This is the Homepage
-                <button onClick={handleLogIn}>CHeck vitals</button>
-                {!isAuthenticated ?<></>:<>{profileName} is logged In. Have Fun!</>}
+                {/* This is the Homepage
+                <button onClick={handleLogIn}>CHeck vitals</button> */}
+                {/* {!isAuthenticated ?<></>:<>{profileName} is logged In. Have Fun!</>} */}
                 {isAuthenticated ?<div>
-                    Now logged in with Auth0
+                    {/* Now logged in with Auth0
                     <GreyBlue>GreyBlue</GreyBlue>
                     <DarkGrey></DarkGrey>
                     <Black></Black>
                     <Steel></Steel>
-                    <Cranberry></Cranberry>
+                    <Cranberry></Cranberry> */}
                     <Textbox>
                         <MiniHeader>Home</MiniHeader>
                         {/* <button onClick={checkVitals}>
@@ -165,12 +165,15 @@ const MainPage = () => {
                     </Textbox>
 
                     <div>
-                        <button onClick={testHomefeed}></button>
+                        {/* <button onClick={testHomefeed}></button> */}
                         {!homeFeed[0]
                         ?<div>Loading</div>
                         :
-                        <>  
-                        <h1>General Chat</h1>
+                        <>
+                        <GeneralChatHeaderDiv>
+                          <GeneralChatHeader>General Chat</GeneralChatHeader>
+                        </GeneralChatHeaderDiv>  
+                        
                         
                         <StyledDiv>{homeFeed.map((feedDetails) => {
                         return (
@@ -186,12 +189,7 @@ const MainPage = () => {
                     </>
                     }
                     </div>
-                    <div>
-                      <h1>This is the Miniature Gallery Section</h1>
-                        <div>
-                          
-                        </div>
-                    </div>
+                    
                 </div>
                 
                 :<>Loading</>}
@@ -205,6 +203,9 @@ const Wrapper = styled.div`
 margin: 0 auto;
 padding: 35px;
 width: 75%;
+border-left: 1px solid rgba(35, 35, 35, 0.15);
+border-right: 1px solid rgba(35, 35, 35, 0.15);
+height: 100vh;
 `;
 const Textbox = styled.div`
 display: flex;
@@ -214,7 +215,6 @@ border-bottom: 10px solid rgba(0, 0, 0, 0.15);
 const StyledTextInput=styled.div`
 display: flex;
 justify-content: space-around;
-
 padding: 25px;
 `
 const MiniHeader = styled.div`
@@ -234,35 +234,38 @@ align-items: center;
 border-radius: 15px;
 padding: 5px;
 box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.52);
+max-width: 40%;
+margin: 0 auto;
+margin-bottom: 15px;
 `;
 const DisplaySelectedCharacter = styled.div`
 
 `;
-const GreyBlue = styled.div`
-background-color: #ACCBE1;
-width: 15px;
-height: 15px;
-`;
-const DarkGrey = styled.div`
-background-color: #e5e5e5;
-width: 15px;
-height: 15px;
-`;
-const Black = styled.div`
-background-color: #595959;
-width: 15px;
-height: 15px;
-`;
-const Steel = styled.div`
-background-color: #7c98b3;
-width: 15px;
-height: 15px;
-`;
-const Cranberry = styled.div`
-background-color: #cc444b;
-width: 15px;
-height: 15px;
-`;
+// const GreyBlue = styled.div`
+// background-color: #ACCBE1;
+// width: 15px;
+// height: 15px;
+// `;
+// const DarkGrey = styled.div`
+// background-color: #e5e5e5;
+// width: 15px;
+// height: 15px;
+// `;
+// const Black = styled.div`
+// background-color: #595959;
+// width: 15px;
+// height: 15px;
+// `;
+// const Steel = styled.div`
+// background-color: #7c98b3;
+// width: 15px;
+// height: 15px;
+// `;
+// const Cranberry = styled.div`
+// background-color: #cc444b;
+// width: 15px;
+// height: 15px;
+// `;
 const LessWords = styled.h3`
 font-size: 15px;
 color: rgba(215, 165, 0, 0.92);
@@ -271,7 +274,6 @@ color: rgba(215, 165, 0, 0.92);
 const OverLimit = styled.h3`
 font-size: 15px;
 color: red;
-
 `;
 
 const FeedArea = styled.div`
@@ -280,7 +282,15 @@ justify-content: center;
 margin: 5px;
 padding: 5px;
 `;
-
+const GeneralChatHeaderDiv = styled.div`
+display: flex;
+justify-content: center;
+`;
+const GeneralChatHeader = styled.h1`
+border-radius: 10px;
+padding: 15px;
+border-bottom: 3px solid #cc444b;
+`;
 const CharacterCount = styled.h3`
 font-size: 15px;
 opacity: 50%;
@@ -336,7 +346,7 @@ margin-left: 15px;
 `;
 
 const StyledDiv = styled.div`
-  
+  background-color: #7c98b3;
   display: flex;
   flex-direction: column-reverse;
   height: 60vh;
