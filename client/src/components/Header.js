@@ -39,10 +39,15 @@ const Header = () => {
   return (
     <Wrapper>
       <UpperWrapper>
-        <HomepageButton onClick={handleMainpageNavigate}>Homepage</HomepageButton>
-        <Title>Roll Low for Initiative Inc</Title>
-        <LoginButton />
-        <LogoutButton />
+        <LogoWrapper>
+          <Title>Roll Low for Initiative</Title>
+          <HomepageButton onClick={handleMainpageNavigate}>Homepage</HomepageButton>
+        </LogoWrapper>
+        <LogginButtonDiv>
+          <LoginButton />
+          <LogoutButton />
+        </LogginButtonDiv>
+        
         
         {/* {loggedIn?
         <div>
@@ -61,7 +66,15 @@ const Header = () => {
     </Wrapper>
   );
 };
+const LogoWrapper = styled.div`
+display:flex;
+margin-left: 100px;
+`;
 
+const LogginButtonDiv = styled.div`
+display:flex;
+margin-right: 100px;
+`;
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -70,13 +83,13 @@ const Wrapper = styled.div`
 `;
 const UpperWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   width: 100vw;
   background-color: #595959;
   color: white;
 `;
 const Title = styled.h1`
-margin: auto 15px auto 15px;
+
 `;
 const LowerWrapper = styled.div`
   display: flex;

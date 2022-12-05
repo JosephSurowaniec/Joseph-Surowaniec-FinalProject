@@ -69,7 +69,7 @@ const Wrapper = styled.div`
 display: flex;
 align-items: center;
 justify-content: center;
-border: 1px solid black;
+
 flex: 1;
 height: 100%;
 
@@ -99,6 +99,7 @@ float: right;
 
 const ModifierSpan = styled.span`
 border: 2px solid red;
+padding: 2px;
 border-radius: 5px;
 `;
 const SavingThrowWrapper = styled.div`

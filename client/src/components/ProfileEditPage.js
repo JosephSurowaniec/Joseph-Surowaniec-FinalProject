@@ -10,7 +10,6 @@ const ProfileEditPage = ({ showModal, setShowModal}) => {
 
     const [changedProfileName , setChangedProfileName] = useState("");
     const [changedProfileImage , setChangedProfileImage] = useState("");
-    const [ image , setImage] = useState('');
     const [ previewSource, setPreviewSource] = useState('');
 
     const handleImageUpload = (e) => {
@@ -64,6 +63,7 @@ const ProfileEditPage = ({ showModal, setShowModal}) => {
             {showModal ? 
             <Background>
                 <ModalWrapper showModal={showModal}>
+                  <StyledUserData>
                     <StyledForm onSubmit={ async (ev) => {               
                         ev.preventDefault();
                         console.log("this is on submit");
@@ -92,24 +92,39 @@ const ProfileEditPage = ({ showModal, setShowModal}) => {
                             });
                         
                     }}>
+                      <StyledNameHeader>
+                        Enter your new Username Below:
+                      </StyledNameHeader>
                         <TextBar>
                             {/* the input field for the all values, sets the variables when the field is changed */}
-                            Name: <StyledInput type="text" name="nickName" value ={changedProfileName} onChange={(ev) => setChangedProfileName(ev.currentTarget.value)} /> 
+                            Username: <StyledInput type="text" name="nickName" value ={changedProfileName} onChange={(ev) => setChangedProfileName(ev.currentTarget.value)} /> 
                         </TextBar>
+                     
+                        
                         <StyledSubmitButton type="submit" value="Submit" >Submit</StyledSubmitButton>
                     </StyledForm>
+                    <StyledUploadImage>
+                    <StyledNameHeader>
+                        Upload a new Image Below:
+                      </StyledNameHeader>
+                      <form onSubmit={handleSubmitFile}>
+                            <input type="file" name="image" onChange={handleImageUpload} />
+                            <StyledUploadButton type="submit">Upload Image</StyledUploadButton>
+                            </form>
+                    </StyledUploadImage>
+                    
+                  </StyledUserData>
+                    
                     <StyledButton onClick={() => setShowModal(prev => !prev)}>X</StyledButton>
                     <SubmitPictureArea>
-                            <form onSubmit={handleSubmitFile}>
-                            <input type="file" name="image" value={image} onChange={handleImageUpload} />
-                            <button type="submit">Submit photo</button>
-                            </form>
+                            
                             {previewSource ? 
                             <div>
                             <StyledPreviewImage src={previewSource} alt="uploaded image" />
                             </div>
                         :<></>}
                         </SubmitPictureArea>
+                        
                 </ModalWrapper>
                 
             </Background> 
@@ -118,7 +133,15 @@ const ProfileEditPage = ({ showModal, setShowModal}) => {
     );
 }
 
-
+const StyledUploadImage = styled.div`
+display: flex;
+flex-direction: column;
+margin: 5px;
+margin-top: 25px;
+align-items: center;
+`;
+const StyledNameHeader = styled.h3`
+`;
 const Background = styled.div`
 width: 100%;
 height: 100%;
@@ -131,15 +154,13 @@ display: flex;
 justify-content: center;
 align-items: center;
 z-index: 100;
-`
+`;
 const TextBar = styled.div`
 display: flex;
-margin: 10px;
 font-size: 30px;
-width: 75%;
 justify-content: flex-end;
 align-items: center;
-`
+`;
 const ModalWrapper = styled.div`
 width: 45%;
 height: 45%;
@@ -153,7 +174,23 @@ display: flex;
 position: relative;
 z-index: 10;
 border-radius: 10px;
-`
+`;
+const StyledUploadButton = styled.button`
+padding: 10px;
+background: #e5e5e5;
+border: none;
+border-radius: 15px;
+:hover{
+  cursor: pointer;
+  background: #accbe1;
+}
+`;
+const StyledUserData = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+margin-top: -50px;
+`;
 const StyledButton = styled.button`
 padding: 15px;
 border-radius: 25px;
@@ -161,11 +198,10 @@ position: absolute;
 right: 0;
 top: 0;
 margin: 25px;
-`
+`;
 const StyledForm = styled.form`
 display: flex;
 flex-direction: column;
-width: 70%;
 align-items: center;
 button {
     justify-content: center;
@@ -173,7 +209,7 @@ button {
 input {
     align-items: center;
 }
-`
+`;
 
 const StyledInput = styled.input`
 
@@ -186,28 +222,36 @@ const StyledInput = styled.input`
   margin-right: 5px;
 
   
-`
+`;
 const StyledSubmitButton = styled.button`
   width: 50%;
   background-color: black;
   color: white;
   padding: 14px 20px;
-  margin: 0 auto;
   border: 1px solid black;
   border-radius: 4px;
-  cursor: pointer;
+  position: absolute;
+  bottom: 0;
+  left: 25%;
+  margin-bottom: 25px;
+  :hover {
+    cursor: pointer;
+    background-color: #595959;
+    border: 1px solid #595959;
+  }
 `;
 
 const SubmitPictureArea = styled.div`
-border: 5px solid black;
+border: 1px solid rgba(35 , 35 , 35 , 0.2);
 border-radius: 10px;
-padding: 25px;
+padding: 5px;
 margin: 15px;
 `;
 
 const StyledPreviewImage = styled.img`
-width: 200px;
-height: 200px;
+width: auto;
+max-height: 350px;
+border-radius: 15px;
 `
 
 const StyledTextArea = styled.textarea`

@@ -10,7 +10,7 @@ const GeneralCharacterDetails = () => {
     const { characterClasses, characterRaces, state  } = useContext ( CharacterContext );
     const {actions} = useContext(CharacterContext);
 
-    const [ image , setImage] = useState('');
+    
     const [ selectedFile, setSelectedFile ] = useState('');
     const [ previewSource, setPreviewSource] = useState('');
 
@@ -24,7 +24,8 @@ const GeneralCharacterDetails = () => {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         setPreviewSource(reader.result);
-        console.log(file.name);
+        console.log(file);
+        
   
         
       }
@@ -62,13 +63,22 @@ const GeneralCharacterDetails = () => {
 
     return(
         <GeneralWrapper>
-          <div>
-            <StyledTextArea name="characterName" id="name" value={state.characterName} placeholder="What's Your Name?" onChange={(e) => actions.updateCharacterName(e.target.value)} />
-          </div>
+          <StyledNameDiv>
+            <StyledNameHeader>
+              Enter the Character's Below:
+            </StyledNameHeader>
+            <TextBar>
+              Name: <StyledInput type="text" name="name" value ={state.characterName} onChange={(e) => actions.updateCharacterName(e.target.value)} /> 
+            </TextBar>
+            {/* <StyledTextArea name="characterName" id="name" value={state.characterName} placeholder="What's Your Name?" onChange={(e) => actions.updateCharacterName(e.target.value)} /> */}
+          </StyledNameDiv>
           <SubmitPictureArea>
+          <StyledNameHeader>
+              Upload an image of your Character Below:
+            </StyledNameHeader>
             <form onSubmit={handleSubmitFile}>
-              <input type="file" name="image" value={image} onChange={handleImageUpload} />
-              <button type="submit">Submit photo</button>
+              <input type="file" name="image" onChange={handleImageUpload} />
+              <StyledSubmitImage type="submit">Submit photo</StyledSubmitImage>
             </form>
             {previewSource ? 
             <PreviewImageWrapper>
@@ -97,7 +107,22 @@ border-radius: 10px;
 padding: 25px;
 margin: 15px;
 `;
+const StyledNameDiv = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+`;
+const StyledSubmitImage = styled.button`
 
+padding: 10px;
+background: white;
+border: none;
+border-radius: 15px;
+:hover {
+    cursor: pointer;
+    background: #accbe1;
+}
+`;
 const PreviewImageWrapper = styled.div`
 display: flex;
 justify-content: center;
@@ -110,7 +135,26 @@ position: absolute;
 border-radius: 15px;
 box-shadow: -9px 5px 15px 5px #000000;
 `;
+const StyledNameHeader = styled.h3`
+`;
+const TextBar = styled.div`
+display: flex;
+font-size: 30px;
+justify-content: flex-end;
+align-items: center;
+`;
+const StyledInput = styled.input`
 
+  padding: 12px 20px;
+  margin: 8px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-left: 25px;
+  margin-right: 5px;
+
+  
+`;
 const StyledTextArea = styled.textarea`
 
   border: 1px solid black;

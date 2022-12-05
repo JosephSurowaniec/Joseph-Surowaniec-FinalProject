@@ -25,6 +25,7 @@ const EditCharacter = () => {
     const {characterId} = useParams();
     const [currentCharacter, setCurrentCharacter] = useState("");
     const [visibleNavButton, setVisibleNavButton] = useState(false);
+    const [infoLoaded, setInfoLoaded] = useState(false);
 
     useEffect(() => {
         actions.resetCharacterData("");
@@ -115,7 +116,7 @@ const EditCharacter = () => {
 
     return (
         isAuthenticated 
-        ?state.characterName?
+        ?state.characterName || state.characterName === ""?
         <Wrapper>
             <CreatorWrapper>
                 <DisplayName>
@@ -123,12 +124,12 @@ const EditCharacter = () => {
                         Character Name: {state.characterName}
                     </div>
                     <div>
-                        <button onClick={submitCharacter}>Confirm Changes</button>
-                        {visibleNavButton?<button onClick={handleCharProfileNav}>Back to {state.characterName}'s profile</button>:<></>}
+                        <StyledEditPageButton onClick={submitCharacter}>Confirm Changes</StyledEditPageButton>
+                        {visibleNavButton?<StyledEditPageButton onClick={handleCharProfileNav}>Back to {state.characterName}'s profile</StyledEditPageButton>:<></>}
                     </div>
                 </DisplayName>
                 <CharacterImage>
-                    {state.characterImageId ?<Image cloudName="dfigamsk5" publicId={state.characterImageId } gravity= "auto" aspect_ratio= "1:1" border= "3px_solid_rgb:cc444b" radius= "max" width="150" height="150" crop="fill"/>
+                    {state.characterImageId ?<StyledImage cloudName="dfigamsk5" publicId={state.characterImageId }/>
                     :<></>}
                 </CharacterImage>
                 <ButtonWrapper>
@@ -184,15 +185,35 @@ const EditCharacter = () => {
             </StyledContentArea>
             
         </Wrapper>
-        :<>Loading <button onClick={showState}>Click</button></>
+        :<Wrapper>Loading</Wrapper>
         :<h1>You are not logged in</h1>
     )
 };
 
 
+const StyledImage = styled(Image)`
+/* max-height: 100%; */
+aspect-ratio: 1/1 ;
+object-fit: cover;
+width: auto;
+height: 150px;
+border: 3px solid #cc444b;
+border-radius: 50%;
+object-position: 0px -1px;
+background-color: #cc444b;
+`;
 
-
-
+const StyledEditPageButton = styled.button`
+margin-right: 25px;
+padding: 10px;
+background: #e5e5e5;
+border: none;
+border-radius: 15px;
+:hover {
+    cursor: pointer;
+    background: #7c98b3;
+}
+`;
 
 const Wrapper = styled.div`
 display: flex;
@@ -203,7 +224,7 @@ border-right: 1px solid #595959;
 border-bottom: 3px solid #cc444b;
 width: 60%;
 margin: 0 auto;
-height: 100vh;
+min-height: 100vh;
 background-color: #595959;
 
 `;

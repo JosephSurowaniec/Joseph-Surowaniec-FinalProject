@@ -56,7 +56,6 @@ const ButtonWrapper = styled.div`
 `;
 const RaceWrapper = styled.div`
 /* clip-path: polygon(0% 0%, 75% 0%, 100% 50%, 75% 100%, 0% 100%); */
-
 border-bottom: 3px solid #7c98b3;
 display: flex;
 justify-content: center;

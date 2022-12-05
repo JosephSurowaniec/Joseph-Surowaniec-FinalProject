@@ -15,18 +15,14 @@ const CharacterFeed = (characterInfo) => {
         console.log(characterInfo)
       };
       
-      const handleEditNav = () => {
-        navigate(`/character/edit/${characterInfo.characterId}`)
-      };
      
     return (
-        <div>
             <Wrapper onClick={handleNav}>
                 <CharacterImage>
                     {/* This is for the image
                     <button onClick={checkStuff}>Click</button> */}
-                    {specificInfo.characterImageId ?<Image cloudName="dfigamsk5" publicId={specificInfo.characterImageId} gravity= "auto" aspect_ratio= "1:1" border= "3px_solid_rgb:cc444b" radius= "max" width="150" height="150" crop="fill"/>
-                    :<Image cloudName="dfigamsk5" publicId="User_Profile/defaultProfileImage_pl3ci7" gravity= "auto" aspect_ratio= "1:1" border= "3px_solid_rgb:cc444b" radius= "max" width="150" height="150" crop="fill" />}
+                    {specificInfo.characterImageId ?<StyledImage cloudName="dfigamsk5" publicId={specificInfo.characterImageId}  />
+                    :<StyledImage cloudName="dfigamsk5" publicId="User_Profile/defaultProfileImage_pl3ci7" />}
                     {/* {aspect_ratio= "1:1", background: "#262c35", border: "3px_solid_rgb:cc444b", gravity= "auto", , width: 100, crop: "fill"} */}
                 </CharacterImage>
                 <div>
@@ -34,15 +30,21 @@ const CharacterFeed = (characterInfo) => {
                     <div>Class: {specificInfo.selectedClass.name}</div>
                     <div>Race: {specificInfo.selectedRace.name}</div>
                 </div>
-            </Wrapper>
-            <div>
-                <button onClick={handleEditNav}>Edit Character</button>
-            </div>
-        </div>
-        
+            </Wrapper> 
     );
 };
 
+const StyledImage = styled(Image)`
+/* max-height: 100%; */
+aspect-ratio: 1/1 ;
+object-fit: cover;
+width: auto;
+height: 250px;
+border: 3px solid #cc444b;
+border-radius: 50%;
+object-position: 0px -1px;
+background-color: #cc444b;
+`;
 
 const Wrapper = styled.div`
 margin: 5px;
@@ -55,6 +57,7 @@ display: flex;
 
 const CharacterImage = styled.div`
 margin-right: 25px;
+
 `;
 
 const CharacterName = styled.div`

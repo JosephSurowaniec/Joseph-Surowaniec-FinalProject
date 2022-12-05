@@ -41,7 +41,7 @@ const ProfilePage = () => {
             .catch((error) => {
                 window.alert("An Error Occured");
             });
-    }, []);
+    }, [profileName]);
 
     const handleEditProfile = () => {
         console.log("this will open the modal");
@@ -59,8 +59,8 @@ const ProfilePage = () => {
                 <ProfileEditPage  showModal={showModal} setShowModal={setShowModal} />
                 <ProfileDetails>
                     <ImageWrapper>
-                        {profileData.profileImage ?<Image cloudName="dfigamsk5" publicId={profileData.profileImage} gravity= "auto" aspect_ratio= "1:1" border= "3px_solid_rgb:7c98b3" radius= "max" width="250" height="250" crop="fill"/>
-                        :<Image cloudName="dfigamsk5" publicId="User_Profile/defaultProfileImage_pl3ci7" gravity= "auto" aspect_ratio= "1:1" border= "3px_solid_rgb:cc444b" radius= "max" width="150" height="150" crop="fill" />}
+                        {profileData.profileImage ?<StyledImage cloudName="dfigamsk5" publicId={profileData.profileImage}/>
+                        :<StyledImage cloudName="dfigamsk5" publicId="User_Profile/defaultProfileImage_pl3ci7"/>}
                     </ImageWrapper>
                         <InfoWrapper>
                             <StyledInfo><StyledInfoSpan>Username:</StyledInfoSpan>{profileData.username}</StyledInfo>
@@ -70,7 +70,7 @@ const ProfilePage = () => {
                 </ProfileDetails>
             </UserInfoWrapper>
             {!userCharacters?<>Loading</>
-            :<div>
+            :<StyledCharacterDisplay>
                 {userCharacters.map((element) => {
                     return(
                         <StyledCharacterFeed key={Math.floor(Math.random() * 1700000000)}>
@@ -80,7 +80,7 @@ const ProfilePage = () => {
                     
                 })}
                 
-            </div>}
+            </StyledCharacterDisplay>}
 
         </Wrapper>
         :<Wrapper>Loading</Wrapper>
@@ -89,11 +89,30 @@ const ProfilePage = () => {
     )
 };
 
+const StyledCharacterDisplay = styled.div`
+padding-top: 25px;
+display: grid;
+grid-template-columns: 575px 575px 575px ;
+align-items: center;
+justify-content: center;
+
+`;
+const StyledImage = styled(Image)`
+aspect-ratio: 1/1 ;
+object-fit: cover;
+width: auto;
+height: 250px;
+border-radius: 50%;
+object-position: 0px -1px;
+border: 3px solid #cc444b;
+background-color: #cc444b;
+`;
+
 const Wrapper = styled.div`
 padding: 25px;
-height: 100vh;
+min-height: 100vh;
 
-`
+`;
 const Header = styled.div`
 border-bottom: 10px solid #accbe1;
 margin-bottom: 10px;
@@ -126,6 +145,8 @@ const StyledCharacterFeed = styled.div`
 margin: 15px;
 border-radius: 15px;
 box-shadow: -7px 5px 6px 4px rgba(0,0,0,0.49);
+/* min-width: 25%;
+max-width: 35%; */
 `;
 const ImageWrapper = styled.div`
 border-right: 2px solid #7c98b3 ;
@@ -135,6 +156,8 @@ width: 250px;
 `;
 const StyledEditButton = styled.button`
 padding: 15px;
-
+border-radius: 15px;
+border: none;
+background: #e5e5e5;
 `;
 export default ProfilePage;
