@@ -20,7 +20,7 @@ const Features = (featureInfo) => {
                                     <StyledLevelNumber>{element.level}</StyledLevelNumber>
                                     <StyledLevelDetails>{element.features[0] ?element.features.map((el) => {
                                         return(
-                                            <Wrapper123 key={Math.floor(Math.random() * 1700000000)}><DetailFeatures name={el.name} index={el.index}/></Wrapper123>
+                                            <InnerWrapper key={Math.floor(Math.random() * 1700000000)}><DetailFeatures name={el.name} index={el.index}/></InnerWrapper>
                                         )
                                     }) 
                                     :<div>No New Features</div>}</StyledLevelDetails>
@@ -46,8 +46,9 @@ overflow-y: auto;
 `;
 
 const StyledLevelNumber = styled.div`
-border-bottom: 1px solid #7c98b3;
 margin: 10px;
+font-size: 25px;
+font-weight: bold;
 `;
 const StyledLevelDetails = styled.div`
 display: flex;
@@ -58,7 +59,7 @@ border: 1px solid rgba(35 , 35 , 35 , 0.2);
 border-radius: 15px;
 `;
 
-const Wrapper123 = styled.div`
+const InnerWrapper = styled.div`
 padding: 15px;
 
 `;

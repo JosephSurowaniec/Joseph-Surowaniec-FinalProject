@@ -78,11 +78,11 @@ const Character = () => {
                         Character Name: {state.characterName}
                     </div>
                     <div>
-                        <button onClick={submitCharacter}>Submit Your Character</button>
+                        <StyledSubmitCharacterButton onClick={submitCharacter}>Submit Your Character</StyledSubmitCharacterButton>
                     </div>
                 </DisplayName>
                 <CharacterImage>
-                    {state.characterImageId ?<Image cloudName="dfigamsk5" publicId={state.characterImageId } gravity= "auto" aspect_ratio= "1:1" border= "3px_solid_rgb:cc444b" radius= "max" width="150" height="150" crop="fill"/>
+                    {state.characterImageId ?<StyledImage cloudName="dfigamsk5" publicId={state.characterImageId } />
                     :<></>}
                 </CharacterImage>
                 <ButtonWrapper>
@@ -142,6 +142,18 @@ const Character = () => {
     )
 };
 
+const StyledImage = styled(Image)`
+/* max-height: 100%; */
+aspect-ratio: 1/1 ;
+object-fit: cover;
+width: auto;
+height: 150px;
+border: 3px solid #cc444b;
+border-radius: 50%;
+object-position: 0px -1px;
+background-color: #cc444b;
+`;
+
 const Wrapper = styled.div`
 display: flex;
 flex-direction: column;
@@ -151,9 +163,21 @@ border-right: 1px solid #595959;
 border-bottom: 3px solid #cc444b;
 width: 60%;
 margin: 0 auto;
-height: 100vh;
+min-height: 100vh;
 background-color: #595959;
 
+`;
+
+const StyledSubmitCharacterButton = styled.button`
+margin-top: 25px;
+padding: 10px;
+background: #e5e5e5;
+border: none;
+border-radius: 15px;
+:hover {
+    cursor: pointer;
+    background: #7c98b3;
+}
 `;
 
 const CharacterImage = styled.div`
@@ -232,6 +256,8 @@ border: none;
 // `;
 const StyledInputArea = styled.div`
 display: flex;
+
+
 `;
 
 const StyledContentArea = styled.div`

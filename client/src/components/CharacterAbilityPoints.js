@@ -113,10 +113,14 @@ const CharacterAbilityPoints = () => {
 
     return (
         <Wrapper>
+            <StyledHeader>Pick the Stats for your Character</StyledHeader>
             <PointsWrapper> Points Remaining: {pointsLeft} </PointsWrapper>
-            <button onClick={checkNums}></button>
+                <div>
+                    <StyledSubmitButton onClick={handleSubmitStats}>Confirm Stats</StyledSubmitButton>
+                </div>{/* <button onClick={checkNums}></button> */}
             <FormWrapper>
-                                <StatsWrapper><label>STRENGTH</label>
+                                <StatsWrapper>
+                                    <StyledLabel>STRENGTH</StyledLabel>
                                     <select value={state.abilityScores.strength} onChange={(e) => {actions.updateStr(e.target.value)
                                                                                                     actions.updateStrPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
@@ -131,7 +135,7 @@ const CharacterAbilityPoints = () => {
                                     <StatBox>Strength <div>{updatedStr}</div><ModifierWrapper>{ModifierValues[updatedStr]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
-                                    <label>DEXTERITY</label>
+                                    <StyledLabel>DEXTERITY</StyledLabel>
                                     <select value={state.abilityScores.dexterity} onChange={(e) => {actions.updateDex(e.target.value)
                                                                                                     actions.updateDexPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
@@ -146,7 +150,7 @@ const CharacterAbilityPoints = () => {
                                     <StatBox>Dex <div>{updatedDex}</div><ModifierWrapper>{ModifierValues[updatedDex]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
-                                    <label>CONSTITUTION</label>
+                                    <StyledLabel>CONSTITUTION</StyledLabel>
                                     <select value={state.abilityScores.constitution} onChange={(e) => {actions.updateCon(e.target.value)
                                                                                                     actions.updateConPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
@@ -161,7 +165,7 @@ const CharacterAbilityPoints = () => {
                                     <StatBox>Con <div>{updatedCon}</div><ModifierWrapper>{ModifierValues[updatedCon]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
-                                    <label>INTELLIGENCE</label>
+                                    <StyledLabel>INTELLIGENCE</StyledLabel>
                                     <select value={state.abilityScores.intelligence} onChange={(e) => {actions.updateInt(e.target.value)
                                                                                                     actions.updateIntPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
@@ -176,7 +180,7 @@ const CharacterAbilityPoints = () => {
                                     <StatBox>Int <div>{updatedInt}</div><ModifierWrapper>{ModifierValues[updatedInt]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
-                                    <label>WISDOM</label>
+                                    <StyledLabel>WISDOM</StyledLabel>
                                     <select value={state.abilityScores.wisdom} onChange={(e) => {actions.updateWis(e.target.value)
                                                                                                     actions.updateWisPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
@@ -191,7 +195,7 @@ const CharacterAbilityPoints = () => {
                                     <StatBox>Wisdom <div>{updatedWis}</div><ModifierWrapper>{ModifierValues[updatedWis]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
                                 <StatsWrapper>
-                                    <label>CHARISMA</label>
+                                    <StyledLabel>CHARISMA</StyledLabel>
                                     <select value={state.abilityScores.charisma} onChange={(e) => {actions.updateCha(e.target.value)
                                                                                                     actions.updateChaPoints(pointValues[e.target.value])} }>
                                         <option value={8}>8</option>
@@ -205,9 +209,7 @@ const CharacterAbilityPoints = () => {
                                     </select>
                                     <StatBox>Charisma <div>{updatedCha}</div><ModifierWrapper>{ModifierValues[updatedCha]}</ModifierWrapper></StatBox>
                                 </StatsWrapper>
-                                <div>
-                                    <button onClick={handleSubmitStats}>Confirm Stats</button>
-                                </div>
+                                
                                     
                             </FormWrapper>
                         <div>
@@ -225,7 +227,7 @@ const CharacterAbilityPoints = () => {
 
 
 const Wrapper = styled.div`
-  margin-top: 50px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -235,14 +237,31 @@ const Wrapper = styled.div`
   padding: 50px;
   border-radius: 15px;
 `;
+const StyledSubmitButton = styled.button`
 
+padding: 10px;
+background: white;
+border: none;
+border-radius: 15px;
+:hover {
+    cursor: pointer;
+    background: #accbe1;
+}
+`;
 const PointsWrapper = styled.div`
 padding: 25px 25px 0 25px;
 margin-bottom: 15px;
 border-bottom: 3px solid #cc444b;
 font-size: 25px;
 `;
-
+const StyledHeader = styled.h3`
+margin: 5px;
+margin-top: -25px;
+`;
+const StyledLabel = styled.label`
+margin-bottom: 3px;
+font-weight: bold;
+`;
 const FormWrapper = styled.form`
 display: grid;
 grid-template-columns: auto auto ;

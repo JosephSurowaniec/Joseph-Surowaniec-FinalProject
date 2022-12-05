@@ -35,8 +35,9 @@ const Footer = () => {
   return (
     <Wrapper>
       <UpperWrapper>
-        <HomepageButton onClick={handleMainpageNavigate}>MainPage</HomepageButton>
-        <h1>This is the Footer object</h1>
+        <RightsWrapper>
+          Dungeons & Dragons, D&D, their respective logos, and all Wizards titles and characters are property of Wizards of the Coast LLC in the U.S.A. and other countries. ©2022 Wizards.
+        </RightsWrapper>
         
       </UpperWrapper>
       {/* {isAuthenticated?
@@ -65,21 +66,11 @@ const UpperWrapper = styled.div`
   color: white;
 `;
 
-const LowerWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  border: none;
-  width: 100vw;
-  background-color: #7c98b3;
-  color: white;
-  border-top: 5px solid #cc444b;
-`;
-
-const PlayerButton = styled.button`
-border-radius: 15px;
-border: none;
-padding: 15px;
-margin: 15px;
+const RightsWrapper = styled.div`
+display: flex;
+align-items: flex-end;
+margin: 5px;
+height: 50px;
 `;
 
 const HomepageButton = styled.button`

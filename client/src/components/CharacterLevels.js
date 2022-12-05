@@ -18,8 +18,8 @@ const CharacterLevels = (features) => {
     }
     return (
         <Wrapper>
-            <h1>Level Page</h1>
-            <button onClick={seeFeatures}>Click to set up features</button>
+            <h3>Choose the Level of your Character</h3>
+            {/* <button onClick={seeFeatures}>Click to set up features</button> */}
             <LevelSelectorForm>
                 <form>
                     <StyledLabel>Select your Level</StyledLabel>
@@ -73,7 +73,7 @@ const Wrapper = styled.div`
 `;
 
 const LevelSelectorForm = styled.div`
-border: 1px solid black;
+border: 1px solid rgba(35 , 35, 35, 0.2);
 padding: 25px;
 margin: 25px 0 25px 0;
 `;

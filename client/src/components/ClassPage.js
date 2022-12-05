@@ -39,7 +39,7 @@ const ClassPage = ({ showModal, setShowModal, classInfo, classAbilities}) => {
                         })}
                     </div>
                     </ScrollArea>
-                    <StyledConfirmButton onClick={submitClass}>Click me</StyledConfirmButton>
+                    <StyledConfirmButton onClick={submitClass}>Confirm Class</StyledConfirmButton>
                     <StyledButton onClick={() => setShowModal(prev => !prev)}>Exit</StyledButton>        
                 </ModalWrapper>
                 
@@ -87,8 +87,9 @@ justify-content: center;
 margin-bottom: 5px;
 `;
 const StyledLevelNumber = styled.div`
-border-bottom: 1px solid #7c98b3;
 margin: 10px;
+font-size: 25px;
+font-weight: bold;
 `;
 const StyledLevelDetails = styled.div`
 padding: 25px;

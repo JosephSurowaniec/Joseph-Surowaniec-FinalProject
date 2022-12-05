@@ -1,9 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import FeedMessage from "./FeedMessage";
 import { UserContext } from "./UserContext";
-import dragonBornImage from "./dragonbornPlaceholder.jpg"
 import {Image} from 'cloudinary-react';
 import CharacterSkills from "./CharacterSkills";
 import Features from "./Features";
@@ -21,6 +20,7 @@ const CharacterProfile = () => {
     const [progressFeed , setProgressFeed] = useState("");
     const [currentSection, setCurrentSection ] = useState("General");
     const [currentSubSection, setCurrentSubSection ] = useState("Skills")
+    const navigate = useNavigate();
 
     const ModifierValues = {
         4: "-3", 5: "-3", 6: "-2", 7: "-2", 8: "-1", 9: "-1", 10: "0", 11: "0", 12: "+1", 13: "+1", 14: "+2", 15: "+2", 16: "+3", 17: "+3", 18: "+4", 19: "+4", 20: "+5"
@@ -74,6 +74,9 @@ const CharacterProfile = () => {
         console.log(specificCharacterInfo);
     };
 
+    const handleEditNav = () => {
+        navigate(`/character/edit/${characterId}`)
+      };
 
 
     const handleChange = (value) => {
@@ -195,16 +198,19 @@ const CharacterProfile = () => {
                     <SectionWrapper>   
                         {currentSection === "General"?
                         <CharacterInfoWrapper>
-                        <TextWrapper>    
-                            <TextDisplay>
-                                Name: {specificCharacterInfo.characterName}
-                            </TextDisplay>
-                            <TextDisplay>
-                                Class: <LevelSpan>Lv{specificCharacterInfo.level}</LevelSpan>{specificCharacterInfo.selectedClass.name}
-                            </TextDisplay>
-                            <TextDisplay>
-                                Race: {specificCharacterInfo.selectedRace.name}
-                            </TextDisplay>
+                        <TextWrapper>
+                            <div>
+                                <TextDisplay>
+                                    Name: {specificCharacterInfo.characterName}
+                                </TextDisplay>
+                                <TextDisplay>
+                                    Class: {specificCharacterInfo.selectedClass.name}<LevelSpan>Lv{specificCharacterInfo.level}</LevelSpan>
+                                </TextDisplay>
+                                <TextDisplay>
+                                    Race: {specificCharacterInfo.selectedRace.name}
+                                </TextDisplay>
+                            </div>    
+                            
                             <StatsWrapper>
                                 {/* Stats Location
                                 <button onClick={showInfo}></button> */}
@@ -215,7 +221,9 @@ const CharacterProfile = () => {
                                 <StatBox>Wisdom <div>{specificCharacterInfo.modifiedAbilityScores.wisdom}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.wisdom]}</ModifierWrapper></StatBox>
                                 <StatBox>Charisma <div>{specificCharacterInfo.modifiedAbilityScores.charisma}</div><ModifierWrapper>{ModifierValues[specificCharacterInfo.modifiedAbilityScores.charisma]}</ModifierWrapper></StatBox>
                             </StatsWrapper>
-                            
+                       
+                            {userId === userCharacter?<StyledEditCharacterButton onClick={handleEditNav}>Edit Character</StyledEditCharacterButton>:<></>}
+                         
                         </TextWrapper>
                         <SubSectionWrapper>
                             <SubSectionButtonWrapper>
@@ -265,10 +273,11 @@ const CharacterProfile = () => {
 
                                 <PersonalCommentSection>
                                     {/* <button onClick={testProgressfeed}></button> */}
-                                    {!progressFeed[0]
+                                    {!progressFeed
                                     ?<div>Loading</div>
-                                    :
-                                    <>
+                                    :!progressFeed[0]
+                                    ?<>Nothing Posted Yet</>
+                                    :<>
                                     <StyledDiv>{progressFeed.map((feedDetails) => {
                                     return (
                                         
@@ -307,9 +316,12 @@ const CharacterProfile = () => {
                                 </Textbox>
 
                                 <PersonalCommentSection>
+                                
                                     {/* <button onClick={testHomefeed}></button> */}
-                                    {!characterFeed[0]
+                                    {!characterFeed
                                     ?<div>Loading</div>
+                                    :!characterFeed[0]
+                                    ?<>Nothing Posted Yet</>
                                     :
                                     <>
                                     <StyledDiv>{characterFeed.map((feedDetails) => {
@@ -340,19 +352,31 @@ const CharacterProfile = () => {
 };
 
 const Wrapper = styled.div`
-border: 1px solid black;
+
 padding: 50px;
 margin: 25px;
-height: 78vh;
+min-height: 100vh;
+border-right: 1px solid rgba(35, 35, 35, 0.2);
+border-left: 1px solid rgba(35, 35, 35, 0.2);
 `;
 const InnerWrapper = styled.div`
-
 margin: 25px;
 display: flex;
 height: 65%;
-
 `;
-
+const StyledEditCharacterButton = styled.button`
+padding: 15px;
+background: #e5e5e5;
+border: none;
+border-radius: 15px;
+position: absolute;
+top: 5px;
+right: 5px;
+:hover {
+    cursor: pointer;
+    background: #accbe1;
+}
+`;
 const StyledImage = styled(Image)`
 border-radius: 15px;
 max-width: 400px;
@@ -371,8 +395,9 @@ display: flex;
 flex: 1;
 `;
 const LevelSpan = styled.span`
-font-size: 15px;
-margin-right: 15px;
+font-size: 25px;
+margin-left: 15px;
+font-weight: bold;
 `;
 const ContentWrapper = styled.div`
 display: flex;
@@ -389,25 +414,36 @@ padding-left: 25px;
 `;
 const Banner = styled.div`
 display: flex;
-background-color: black;
+background-color: #595959;
 color: white;
 height: 55px;
 `;
 const StyledChangeButton = styled.button`
 padding: 15px;
-background-color: grey;
+font-size: 25px;
+background-color: #595959;
 color: white;
 flex: 1;
 height: 55px;
+:hover {
+    background-color: #7c98b3;
+    cursor: pointer;
+}
 `;
 
 const StyledSubSectionButton = styled.button`
+border: none;
+margin-bottom: 5px;
 padding: 15px;
-background-color: black;
-color: #accbe1;
+background-color: #595959;
+color: #e5e5e5;
 font-size: 20px;
 font-weight: bold;
 border-bottom: 2px solid #cc444b;
+:hover {
+    background-color: #cc444b;
+    cursor: pointer;
+}
 `;
 const SubSectionWrapper = styled.div`
 display: flex;
@@ -416,7 +452,7 @@ flex: 1;
 const SubSectionButtonWrapper = styled.div`
 display: flex;
 flex-direction: column;
-background-color: black;
+background-color: #7c98b3;
 color: white;
 `
 const ImageWrapper = styled.div`
@@ -438,6 +474,18 @@ width: 75%;
 const TextWrapper = styled.div`
 padding: 25px;
 width: 450px;
+display: flex;
+flex-direction: column;
+border-left: 1px solid rgba( 35, 35 ,35 , 0.2);
+border-bottom: 1px solid rgba( 35, 35 ,35 , 0.2);
+align-items: center;
+padding-top: 50px;
+position: relative;
+button {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
 `;
 
 const StatsWrapper = styled.div`
@@ -547,7 +595,7 @@ align-items: center;
 `
 const StyledSubmit = styled.button`
 height: 35px;
-background-color: pink;
+background-color: #cc444b;
 padding: 2px 15px 2px 15px;
 color: white;
 font-size: 15px;

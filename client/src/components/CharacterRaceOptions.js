@@ -10,7 +10,10 @@ const CharacterRaceOptions = () => {
     const {actions} = useContext(CharacterContext);
 
     return (
-        <div>
+        <Wrapper>
+            <StyledHeader>Choose the Race of your Character</StyledHeader>
+            <ContentWrapper>
+            
             {!characterRaces?<div>Loading</div>
                         :characterRaces.results.map((element => {
                         return (
@@ -19,8 +22,26 @@ const CharacterRaceOptions = () => {
                             </div>
                         )
                     }))}
-        </div>
+            </ContentWrapper>
+        </Wrapper>
+        
     )
 }
 
+const Wrapper = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+`;
+const ContentWrapper = styled.div`
+
+display: grid;
+grid-template-columns: 250px 250px 250px ;
+align-items: center;
+justify-content: center;
+
+`;
+const StyledHeader= styled.h2`
+color: #e5e5e5;
+`;
 export default CharacterRaceOptions;

@@ -56,5 +56,9 @@ border: none;
 background: #7c98b3;
 padding: 10px;
 border-radius: 15px;
+:hover {
+    cursor: pointer;
+    background: #accbe1;
+}
 `;
 export default DetailFeatures;

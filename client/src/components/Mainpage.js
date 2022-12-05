@@ -8,10 +8,25 @@ import CharacterFeed from "./CharacterFeed";
 const MainPage = () => {
     const { profileName , loggedIn, userId} = useContext(UserContext)
     const { user, isAuthenticated } = useAuth0();
+    const [getInfo, setGetInfo] = useState(false);
     const [formData, setFormData] = useState("");
     const [ homeFeed, setHomeFeed ] = useState("");
     const [userCharacters , setUserCharacters] = useState("");
     const [postCharacter , setPostCharacter] = useState("");
+
+    useEffect(() => {
+
+        fetch(`/homefeed`)
+        .then(res => res.json())
+        .then(data => {
+            setHomeFeed(data.data);
+            setGetInfo(true);
+
+        }).catch((error) => {
+          console.log("The MainFeed Broke")
+      });
+
+    }, []);
 
     useEffect(() => {
 
@@ -28,18 +43,7 @@ const MainPage = () => {
             });
       }
 
-        fetch(`/homefeed`)
-        .then(res => res.json())
-        .then(data => {
-            setHomeFeed(data.data);
-
-        }).catch((error) => {
-          console.log("The MainFeed Broke")
-      });
-
-      
-
-    }, []);
+    }, [getInfo]);
 
     const handleLogIn = () => {
         console.log(homeFeed);
@@ -103,12 +107,6 @@ const MainPage = () => {
                 <button onClick={handleLogIn}>CHeck vitals</button> */}
                 {/* {!isAuthenticated ?<></>:<>{profileName} is logged In. Have Fun!</>} */}
                 {isAuthenticated ?<div>
-                    {/* Now logged in with Auth0
-                    <GreyBlue>GreyBlue</GreyBlue>
-                    <DarkGrey></DarkGrey>
-                    <Black></Black>
-                    <Steel></Steel>
-                    <Cranberry></Cranberry> */}
                     <Textbox>
                         <MiniHeader>Home</MiniHeader>
                         {/* <button onClick={checkVitals}>
@@ -117,7 +115,18 @@ const MainPage = () => {
                         
                         <form onSubmit={handleSubmit}>
                         <StyledTextInput>
-                          <StyledTextArea name="message" id="message" value={formData} placeholder="Share Your Characters!" onChange={(e) => handleChange(e.target.value)} />
+                          <div>
+                            <StyledTextArea name="message" id="message" value={formData} placeholder="Share Your Characters!" onChange={(e) => handleChange(e.target.value)} />
+                          <InputArea>
+                            {
+                            formData.length > 224
+                                ?<>{formData.length > 150 ?<OverLimit>{150 - formData.length}</OverLimit> : <LessWords>{150 - formData.length}</LessWords>} </>
+                                :<CharacterCount>{150 - formData.length}</CharacterCount>
+                            }
+                            <StyledSubmit type="submit" disabled={formData.length > 150}>Submit</StyledSubmit>
+                        </InputArea>
+                          </div>
+                          
                           <DisplaySelectedCharacter>
                             {userCharacters?userCharacters.filter((el) => {
                                 return(
@@ -130,22 +139,17 @@ const MainPage = () => {
                                       
                                     )
                                   }):<div>No Character Chosen</div>}
+
                           </DisplaySelectedCharacter>
+
                         </StyledTextInput>
-                        <InputArea>
-                            {
-                            formData.length > 224
-                                ?<>{formData.length > 150 ?<OverLimit>{150 - formData.length}</OverLimit> : <LessWords>{150 - formData.length}</LessWords>} </>
-                                :<CharacterCount>{150 - formData.length}</CharacterCount>
-                            }
-                            <StyledSubmit type="submit" disabled={formData.length > 150}>Submit</StyledSubmit>
-                        </InputArea>
+                        
                         </form>
                         <CharacterSelecterWrapper>
-                            Choose a character to add to your post
-                            <div>
-                              {userCharacters?<form>
-                                <select value={postCharacter} onChange={(e) => {handlePostedCharacter(e.target.value)} }>
+                            <AddCharacterHeader>Choose a character to add to your post</AddCharacterHeader>
+                            <CharacterDiv>
+                              {userCharacters?<CharacterForm>
+                                <CharacterOption value={postCharacter} onChange={(e) => {handlePostedCharacter(e.target.value)} }>
                                   <option value={""}>Select a character</option>
                                   {userCharacters.map((element) => {
                                     return (
@@ -154,17 +158,22 @@ const MainPage = () => {
                                       </option>
                                     )
                                   })}
-                                </select>
-                              </form>
+                                </CharacterOption>
+                              </CharacterForm>
                               :<></>}
-                            </div>
+                            </CharacterDiv>
                             
                           </CharacterSelecterWrapper>
                         
                         
                     </Textbox>
 
-                    <div>
+                    
+                    
+                </div>
+                
+                :<>You must be Logged in to Post</>}
+                <div>
                         {/* <button onClick={testHomefeed}></button> */}
                         {!homeFeed[0]
                         ?<div>Loading</div>
@@ -175,7 +184,9 @@ const MainPage = () => {
                         </GeneralChatHeaderDiv>  
                         
                         
-                        <StyledDiv>{homeFeed.map((feedDetails) => {
+                        <StyledDiv>
+                          <StyledDiv2>
+                          {homeFeed.map((feedDetails) => {
                         return (
                             
                             <FeedArea key={Math.floor(Math.random()*140000000000000)}>
@@ -184,28 +195,42 @@ const MainPage = () => {
                             
                         )
                         
-                        })}</StyledDiv>
+                        })}
+                          </StyledDiv2>
+                        </StyledDiv>
                     
                     </>
                     }
                     </div>
-                    
-                </div>
-                
-                :<>Loading</>}
             </Wrapper>
         )
         
     
 };
 
+const CharacterDiv = styled.div`
+width: 100%;
+display: flex;
+justify-content: center;
+padding: 5px;
+`;
+const CharacterForm = styled.form`
+width: 100%;
+display: flex;
+justify-content: center;
+`;
+const CharacterOption = styled.select`
+width: 95%;
+margin: 5px;
+font-size: 20px;
+`;
 const Wrapper = styled.div`
 margin: 0 auto;
 padding: 35px;
 width: 75%;
 border-left: 1px solid rgba(35, 35, 35, 0.15);
 border-right: 1px solid rgba(35, 35, 35, 0.15);
-height: 100vh;
+min-height: 100vh;
 `;
 const Textbox = styled.div`
 display: flex;
@@ -216,7 +241,10 @@ const StyledTextInput=styled.div`
 display: flex;
 justify-content: space-around;
 padding: 25px;
-`
+`;
+const AddCharacterHeader = styled.h3`
+margin: 15px 15px 15px 15px;
+`;
 const MiniHeader = styled.div`
 border-bottom: 5px solid #595959;
 display: flex;
@@ -241,31 +269,7 @@ margin-bottom: 15px;
 const DisplaySelectedCharacter = styled.div`
 
 `;
-// const GreyBlue = styled.div`
-// background-color: #ACCBE1;
-// width: 15px;
-// height: 15px;
-// `;
-// const DarkGrey = styled.div`
-// background-color: #e5e5e5;
-// width: 15px;
-// height: 15px;
-// `;
-// const Black = styled.div`
-// background-color: #595959;
-// width: 15px;
-// height: 15px;
-// `;
-// const Steel = styled.div`
-// background-color: #7c98b3;
-// width: 15px;
-// height: 15px;
-// `;
-// const Cranberry = styled.div`
-// background-color: #cc444b;
-// width: 15px;
-// height: 15px;
-// `;
+
 const LessWords = styled.h3`
 font-size: 15px;
 color: rgba(215, 165, 0, 0.92);
@@ -347,8 +351,6 @@ margin-left: 15px;
 
 const StyledDiv = styled.div`
   background-color: #7c98b3;
-  display: flex;
-  flex-direction: column-reverse;
   height: 60vh;
   overflow-y: auto;
   ::-webkit-scrollbar {
@@ -362,6 +364,11 @@ const StyledDiv = styled.div`
 ::-webkit-scrollbar-track {
     background-color: rgba(0, 0, 0, 0.15);
 } 
+  `;
+
+const StyledDiv2 = styled.div`
+  display: flex;
+  flex-direction: column-reverse;
   `;
 
 export default MainPage;
